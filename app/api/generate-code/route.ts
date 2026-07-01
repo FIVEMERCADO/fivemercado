@@ -2,6 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { supabaseClient } from "@/lib/supabase";
 
+// ── Rate limiter en memoria ──────────────────────────────────────────────────
+// En producción usar Upstash Redis. Aquí funciona por instancia serverless.
+const RL = new Map<string, { count: number; resetAt: number }>();
+const RL_MAX  = 5;               // máximo 5 códigos
+const RL_WINDOW = 60 * 60 * 1000; // por hora
+
+function checkRateLimit(userId: string): { allowed: boolean; remaining: number } {
+  const now = Date.now();
+  const entry = RL.get(userId);
+
+  if (!entry || now > entry.resetAt) {
+    RL.set(userId, { count: 1, resetAt: now + RL_WINDOW });
+    return { allowed: true, remaining: RL_MAX - 1 };
+  }
+
+  if (entry.count >= RL_MAX) {
+    return { allowed: false, remaining: 0 };
+  }
+
+  entry.count++;
+  return { allowed: true, remaining: RL_MAX - entry.count };
+}
+
+// ── Código alfanumérico seguro ───────────────────────────────────────────────
 function generateCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
@@ -11,22 +35,29 @@ function generateCode(): string {
   return code;
 }
 
+// ── POST /api/generate-code ──────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  // 1. Autenticación
   const session = await auth();
   if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 
   const body = await req.json();
   const { script_id } = body;
 
-  if (!script_id) {
-    return NextResponse.json({ error: "Missing script_id" }, { status: 400 });
+  if (!script_id || typeof script_id !== "string") {
+    return NextResponse.json({ error: "script_id requerido" }, { status: 400 });
+  }
+
+  const discordId = (session.user as { discordId?: string }).discordId;
+  if (!discordId) {
+    return NextResponse.json({ error: "Cuenta de Discord no vinculada" }, { status: 403 });
   }
 
   const supabase = supabaseClient();
-  const discordId = (session.user as { discordId?: string }).discordId;
 
+  // 2. Resolver usuario en DB
   const { data: user } = await supabase
     .from("users")
     .select("id")
@@ -34,9 +65,22 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 });
   }
 
+  // 3. Rate limit — 5 códigos/hora por usuario
+  const rl = checkRateLimit(user.id);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "Límite de códigos alcanzado. Intenta de nuevo en 1 hora." },
+      {
+        status: 429,
+        headers: { "Retry-After": "3600", "X-RateLimit-Remaining": "0" },
+      }
+    );
+  }
+
+  // 4. Verificar que el usuario REALMENTE compró este script
   const { data: purchase } = await supabase
     .from("purchases")
     .select("id")
@@ -45,17 +89,20 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (!purchase) {
-    return NextResponse.json({ error: "You have not purchased this script" }, { status: 403 });
+    return NextResponse.json(
+      { error: "No tienes este script en tu biblioteca" },
+      { status: 403 }
+    );
   }
 
-  // Invalidate existing unused codes for this purchase
+  // 5. Invalidar códigos anteriores no usados para esta compra
   await supabase
     .from("redeem_codes")
     .update({ used: true, used_at: new Date().toISOString() })
     .eq("purchase_id", purchase.id)
     .eq("used", false);
 
-  // Generate new code
+  // 6. Generar y guardar nuevo código
   const code = generateCode();
 
   const { data: redeemCode, error } = await supabase
@@ -71,8 +118,12 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) {
-    return NextResponse.json({ error: "Failed to generate code" }, { status: 500 });
+    console.error("Error generando código:", error);
+    return NextResponse.json({ error: "Error interno al generar código" }, { status: 500 });
   }
 
-  return NextResponse.json({ code: redeemCode.code });
+  return NextResponse.json(
+    { code: redeemCode.code },
+    { headers: { "X-RateLimit-Remaining": String(rl.remaining) } }
+  );
 }

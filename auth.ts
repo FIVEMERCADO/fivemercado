@@ -2,10 +2,20 @@ import NextAuth from "next-auth";
 import Discord from "next-auth/providers/discord";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 días
+  },
   providers: [
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID!,
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope: "identify email guilds",
+        },
+      },
     }),
   ],
   callbacks: {
