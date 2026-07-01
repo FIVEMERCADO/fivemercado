@@ -32,7 +32,7 @@ export function StarRating({ rating, reviews, className, showCount = true }: Sta
         ))}
       </span>
       {showCount && reviews !== undefined && (
-        <span className="text-xs text-gray-500 font-inter">({reviews} reviews)</span>
+        <span className="text-xs text-gray-500 font-inter">({reviews} reseñas)</span>
       )}
     </span>
   );

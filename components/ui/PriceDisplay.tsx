@@ -34,7 +34,7 @@ export function PriceDisplay({ price, isFree, size = "md", className }: PriceDis
           className
         )}
       >
-        FREE
+        GRATIS
       </span>
     );
   }

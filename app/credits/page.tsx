@@ -13,12 +13,12 @@ const PACKAGES = [
 ];
 
 const MOCK_TRANSACTIONS = [
-  { type: "SCRIPT SALE", description: "Advanced Police MDT System", date: "Jun 28, 2026", amount: 24.99 },
-  { type: "PAYPAL", description: "Purchased 300 credits", date: "Jun 20, 2026", amount: 300 },
-  { type: "PURCHASE", description: "Bought: Heist Pack", date: "Jun 18, 2026", amount: -49.99 },
-  { type: "PAYPAL", description: "Purchased 100 credits", date: "Jun 10, 2026", amount: 100 },
-  { type: "PURCHASE", description: "Bought: QBCore Vehicle Dealer", date: "Jun 05, 2026", amount: 0 },
-  { type: "SCRIPT SALE", description: "Realistic Fuel System", date: "May 30, 2026", amount: 12.5 },
+  { type: "VENTA", description: "Advanced Police MDT System", date: "28 Jun 2026", amount: 24.99 },
+  { type: "PAYPAL", description: "Comprado 300 créditos", date: "20 Jun 2026", amount: 300 },
+  { type: "COMPRA", description: "Comprado: Heist Pack", date: "18 Jun 2026", amount: -49.99 },
+  { type: "PAYPAL", description: "Comprado 100 créditos", date: "10 Jun 2026", amount: 100 },
+  { type: "COMPRA", description: "Comprado: QBCore Vehicle Dealer", date: "05 Jun 2026", amount: 0 },
+  { type: "VENTA", description: "Realistic Fuel System", date: "30 May 2026", amount: 12.5 },
 ];
 
 export default function CreditsPage() {
@@ -42,18 +42,18 @@ export default function CreditsPage() {
         {/* Title */}
         <div className="text-center mb-12">
           <h1 className="font-rajdhani font-bold italic uppercase text-5xl md:text-7xl leading-none">
-            <span className="text-white">BUY </span>
-            <span className="text-primary">CREDITS</span>
+            <span className="text-white">COMPRAR </span>
+            <span className="text-primary">CRÉDITOS</span>
           </h1>
           <p className="text-gray-400 font-inter mt-3">
-            Credits are the currency used to purchase scripts and resources on the marketplace.
+            Los créditos son la moneda usada para comprar scripts y recursos en el marketplace.
           </p>
         </div>
 
         {/* Current balance */}
         <div className="bg-dark-lighter/70 backdrop-blur-md border border-white/5 rounded-3xl p-8 text-center mb-12">
           <p className="text-xs text-gray-500 uppercase tracking-[0.3em] font-rajdhani font-bold mb-4">
-            YOUR CURRENT BALANCE
+            TU SALDO ACTUAL
           </p>
           <div className="flex items-center justify-center gap-4 mb-2">
             <span className="text-5xl">🪙</span>
@@ -61,11 +61,11 @@ export default function CreditsPage() {
               {balance.toLocaleString()}
             </span>
           </div>
-          <p className="text-gray-500 text-sm font-inter">Available credits</p>
+          <p className="text-gray-500 text-sm font-inter">Créditos disponibles</p>
         </div>
 
         {/* Packages */}
-        <SectionTitle white="AVAILABLE" cyan="PACKAGES" className="mb-6" />
+        <SectionTitle white="PAQUETES" cyan="DISPONIBLES" className="mb-6" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
           {PACKAGES.map((pkg) => (
             <div
@@ -102,16 +102,16 @@ export default function CreditsPage() {
                     {pkg.credits.toLocaleString()}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 font-inter">credits</p>
+                <p className="text-xs text-gray-500 font-inter">créditos</p>
               </div>
 
               <div className="text-center">
-                <p className="text-sm text-gray-400 font-inter">Price: <span className="text-white font-bold">€{pkg.price}.00</span></p>
+                <p className="text-sm text-gray-400 font-inter">Precio: <span className="text-white font-bold">€{pkg.price}.00</span></p>
               </div>
 
               {/* Features */}
               <ul className="space-y-1.5">
-                {["✓ Instant delivery", "✓ Lifetime validity"].map((f) => (
+                {["✓ Entrega inmediata", "✓ Validez permanente"].map((f) => (
                   <li key={f} className="text-xs text-gray-500 font-inter">{f}</li>
                 ))}
               </ul>
@@ -121,22 +121,22 @@ export default function CreditsPage() {
                 disabled={loading === pkg.id}
                 className="w-full py-3 bg-primary text-dark font-rajdhani font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-all shadow-lg shadow-primary/20 disabled:opacity-60 disabled:scale-100 text-sm flex items-center justify-center gap-2"
               >
-                {loading === pkg.id ? "Loading..." : "💳 BUY WITH PAYPAL"}
+                {loading === pkg.id ? "Cargando..." : "💳 PAGAR CON PAYPAL"}
               </button>
             </div>
           ))}
         </div>
 
         {/* Transaction history */}
-        <SectionTitle white="TRANSACTION" cyan="HISTORY" className="mb-6" />
+        <SectionTitle white="HISTORIAL DE" cyan="TRANSACCIONES" className="mb-6" />
         <div className="bg-dark-lighter/70 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/5">
-                <th className="text-left px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani">TYPE</th>
-                <th className="text-left px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani hidden sm:table-cell">DESCRIPTION</th>
-                <th className="text-left px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani hidden md:table-cell">DATE</th>
-                <th className="text-right px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani">AMOUNT</th>
+                <th className="text-left px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani">TIPO</th>
+                <th className="text-left px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani hidden sm:table-cell">DESCRIPCIÓN</th>
+                <th className="text-left px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani hidden md:table-cell">FECHA</th>
+                <th className="text-right px-6 py-4 text-xs text-gray-500 uppercase tracking-wider font-rajdhani">MONTO</th>
               </tr>
             </thead>
             <tbody>
@@ -145,7 +145,7 @@ export default function CreditsPage() {
                   <td className="px-6 py-4">
                     <span
                       className={`px-2 py-0.5 text-xs font-rajdhani font-bold uppercase rounded tracking-wider ${
-                        tx.type === "SCRIPT SALE"
+                        tx.type === "VENTA"
                           ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                           : tx.type === "PAYPAL"
                           ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"

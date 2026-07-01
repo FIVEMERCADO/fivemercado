@@ -27,9 +27,9 @@ export default function ProductDetailPage({ params }: PageProps) {
       <div className="min-h-screen bg-dark flex items-center justify-center">
         <div className="text-center">
           <p className="text-6xl mb-4">404</p>
-          <h1 className="font-rajdhani font-bold italic uppercase text-3xl text-white mb-4">PRODUCT NOT FOUND</h1>
+          <h1 className="font-rajdhani font-bold italic uppercase text-3xl text-white mb-4">PRODUCTO NO ENCONTRADO</h1>
           <Link href="/marketplace" className="text-primary hover:underline font-inter">
-            ← Back to Marketplace
+            ← Volver al Marketplace
           </Link>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default function ProductDetailPage({ params }: PageProps) {
       {(product as Product).features && (
         <div className="mt-4">
           <h4 className="font-rajdhani font-bold uppercase text-white mb-3 text-sm tracking-wider">
-            Key Features
+            Características
           </h4>
           <ul className="space-y-2">
             {((product as Product).features ?? []).map((f: string) => (
@@ -64,14 +64,14 @@ export default function ProductDetailPage({ params }: PageProps) {
         <div className="mt-6 p-4 bg-dark/50 border border-white/5 rounded-xl flex items-center gap-3">
           <Video className="w-5 h-5 text-primary flex-shrink-0" />
           <div>
-            <p className="text-xs text-gray-500 font-inter mb-1">Preview Video</p>
+            <p className="text-xs text-gray-500 font-inter mb-1">Video de Vista Previa</p>
             <a
               href={(product as Product).videoUrl ?? "#"}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary text-sm font-inter hover:underline"
             >
-              Watch on YouTube →
+              Ver en YouTube →
             </a>
           </div>
         </div>
@@ -84,11 +84,11 @@ export default function ProductDetailPage({ params }: PageProps) {
       <div className="text-center py-12">
         <div className="text-4xl mb-3">🔒</div>
         <h4 className="font-rajdhani font-bold italic uppercase text-white mb-2">
-          Purchase Required
+          Compra Requerida
         </h4>
         <p className="text-sm text-gray-500 font-inter">
-          Files are only visible after purchasing this resource. Use the sidebar to purchase,
-          then generate a download code via the Discord bot.
+          Los archivos solo son visibles después de comprar este recurso. Usa el panel lateral para comprar
+          y genera un código de descarga vía el bot de Discord.
         </p>
       </div>
     </div>
@@ -102,7 +102,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="text-center">
               <p className="text-4xl font-rajdhani font-bold text-white">{product.rating}</p>
               <StarRating rating={product.rating} showCount={false} />
-              <p className="text-xs text-gray-500 font-inter mt-1">{product.reviews} reviews</p>
+              <p className="text-xs text-gray-500 font-inter mt-1">{product.reviews} reseñas</p>
             </div>
           </div>
           {/* Placeholder reviews */}
@@ -117,10 +117,10 @@ export default function ProductDetailPage({ params }: PageProps) {
               </div>
               <p className="text-sm text-gray-400 font-inter">
                 {i === 0
-                  ? "Excellent resource, very well documented and easy to install."
+                  ? "Excelente recurso, muy bien documentado y fácil de instalar."
                   : i === 1
-                  ? "Works great on our QBCore server. Support was responsive."
-                  : "Clean code, good optimization. Highly recommend!"}
+                  ? "Funciona perfecto en nuestro servidor QBCore. El soporte fue muy rápido."
+                  : "Código limpio, buena optimización. ¡Lo recomiendo totalmente!"}
               </p>
             </div>
           ))}
@@ -129,9 +129,9 @@ export default function ProductDetailPage({ params }: PageProps) {
         <div className="text-center py-12">
           <div className="text-4xl mb-3">⭐</div>
           <h4 className="font-rajdhani font-bold italic uppercase text-white mb-2">
-            No Reviews Yet
+            Sin Reseñas Aún
           </h4>
-          <p className="text-sm text-gray-500 font-inter">Be the first to review this resource.</p>
+          <p className="text-sm text-gray-500 font-inter">Sé el primero en reseñar este recurso.</p>
         </div>
       )}
     </div>
@@ -148,7 +148,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-2 text-sm font-inter text-white">
               <RefreshCw className="w-4 h-4 flex-shrink-0" />
               <span>
-                <strong>🔄 NEW UPDATE AVAILABLE!</strong> Click to acknowledge and view latest files.
+                <strong>🔄 ¡NUEVA ACTUALIZACIÓN DISPONIBLE!</strong> Haz clic para ver los archivos más recientes.
               </span>
             </div>
             <button
@@ -164,7 +164,7 @@ export default function ProductDetailPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs font-inter text-gray-500 mb-6">
-          <Link href="/" className="hover:text-gray-300 transition-colors">HOME</Link>
+          <Link href="/" className="hover:text-gray-300 transition-colors">INICIO</Link>
           <ChevronRight className="w-3 h-3" />
           <Link href="/marketplace" className="hover:text-gray-300 transition-colors">MARKETPLACE</Link>
           <ChevronRight className="w-3 h-3" />
@@ -176,12 +176,12 @@ export default function ProductDetailPage({ params }: PageProps) {
           <CategoryBadge type={product.type} />
           {product.featured && (
             <span className="inline-flex items-center gap-1 px-3 py-0.5 bg-yellow-500/10 border border-yellow-500/30 rounded text-xs font-rajdhani font-bold uppercase text-yellow-400 tracking-wider">
-              ⭐ FEATURED
+              ⭐ DESTACADO
             </span>
           )}
           {product.isFree && (
             <span className="inline-flex items-center gap-1 px-3 py-0.5 bg-emerald-500/10 border border-emerald-500/30 rounded text-xs font-rajdhani font-bold uppercase text-emerald-400 tracking-wider">
-              FREE RESOURCE
+              RECURSO GRATIS
             </span>
           )}
         </div>
@@ -195,13 +195,13 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-1.5 px-3 py-2 bg-dark-lighter/70 border border-white/5 rounded-xl">
               <Eye className="w-3.5 h-3.5 text-gray-500" />
               <span className="text-xs font-inter text-gray-400">
-                <span className="font-bold text-white">{product.views.toLocaleString()}</span> views
+                <span className="font-bold text-white">{product.views.toLocaleString()}</span> vistas
               </span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-2 bg-dark-lighter/70 border border-white/5 rounded-xl">
               <Download className="w-3.5 h-3.5 text-gray-500" />
               <span className="text-xs font-inter text-gray-400">
-                <span className="font-bold text-white">{product.downloads.toLocaleString()}</span> downloads
+                <span className="font-bold text-white">{product.downloads.toLocaleString()}</span> descargas
               </span>
             </div>
           </div>
@@ -225,9 +225,9 @@ export default function ProductDetailPage({ params }: PageProps) {
             {/* Tabs */}
             <TabPanel
               tabs={[
-                { id: "description", label: "Description", content: featuresTab },
-                { id: "files", label: "Files", content: filesTab },
-                { id: "reviews", label: `Reviews (${product.reviews})`, content: reviewsTab },
+                { id: "description", label: "Descripción", content: featuresTab },
+                { id: "files", label: "Archivos", content: filesTab },
+                { id: "reviews", label: `Reseñas (${product.reviews})`, content: reviewsTab },
               ]}
             />
           </div>
@@ -252,7 +252,7 @@ export default function ProductDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-3 mb-6">
               <span className="w-1 h-7 bg-primary rounded-full" />
               <h2 className="font-rajdhani font-bold italic uppercase text-2xl text-white">
-                RELATED <span className="text-primary">RESOURCES</span>
+                RECURSOS <span className="text-primary">RELACIONADOS</span>
               </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

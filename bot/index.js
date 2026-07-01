@@ -133,7 +133,7 @@ client.on("interactionCreate", async (interaction) => {
           { name: "Code Used", value: `\`${code}\``, inline: true },
           { name: "Status", value: "✅ Redeemed", inline: true }
         )
-        .setFooter({ text: "ScriptVault Marketplace • This link is for your use only." })
+        .setFooter({ text: "FiveMercado • Este enlace es solo para tu uso personal." })
         .setTimestamp();
 
       await dmChannel.send({ embeds: [embed] });

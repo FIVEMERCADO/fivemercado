@@ -80,11 +80,11 @@ export function PurchaseCard({
       {/* Price section */}
       <div className="flex flex-col items-center text-center">
         <span className="text-[10px] font-rajdhani font-black uppercase tracking-[0.3em] text-gray-500 mb-4">
-          Starting At
+          Precio
         </span>
         {isFree ? (
           <div className="text-6xl font-rajdhani font-bold italic tracking-tighter text-white mb-2">
-            FREE
+            GRATIS
           </div>
         ) : (
           <div className="flex items-center gap-2 mb-2">
@@ -96,7 +96,7 @@ export function PurchaseCard({
         )}
         <p className="text-gray-500 text-xs font-bold uppercase tracking-widest flex items-center gap-2 mt-1">
           <Check className="w-3.5 h-3.5 text-primary" />
-          Lifetime Access
+          Acceso de por vida
         </p>
       </div>
 
@@ -107,9 +107,9 @@ export function PurchaseCard({
           <div className="bg-primary/10 border border-primary/20 text-primary p-4 rounded-2xl text-xs font-bold flex items-start gap-3">
             <Info className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <div className="leading-relaxed">
-              Your one-time code is:{" "}
+              Tu código único es:{" "}
               <strong className="font-black tracking-wider">{code}</strong>.{" "}
-              Use it on our Discord bot!
+              ¡Úsalo en nuestro bot de Discord!
             </div>
           </div>
         )}
@@ -121,14 +121,14 @@ export function PurchaseCard({
               <CheckCheck className="w-6 h-6" />
             </div>
             <h4 className="font-rajdhani font-black uppercase italic tracking-tighter text-lg">
-              You own this resource
+              Ya tienes este recurso
             </h4>
             <button
               onClick={handleGetCode}
               disabled={loading}
               className="w-full bg-white text-dark font-rajdhani font-black py-4 rounded-2xl uppercase tracking-widest hover:scale-105 transition-all shadow-xl disabled:opacity-60 disabled:scale-100 text-sm"
             >
-              {loading ? "Generating..." : code ? "GET NEW CODE" : "GET DOWNLOAD CODE"}
+              {loading ? "Generando..." : code ? "NUEVO CÓDIGO" : "OBTENER CÓDIGO"}
             </button>
           </div>
         ) : (
@@ -139,7 +139,7 @@ export function PurchaseCard({
             className="w-full bg-primary text-dark font-rajdhani font-black py-5 rounded-[2rem] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl shadow-primary/20 flex items-center justify-center gap-3 text-lg disabled:opacity-60 disabled:scale-100"
           >
             <ShoppingCart className="w-5 h-5" />
-            {loading ? "Processing..." : isFree ? "Download Free" : "Purchase Now"}
+            {loading ? "Procesando..." : isFree ? "Descargar Gratis" : "Comprar Ahora"}
           </button>
         )}
       </div>
@@ -149,14 +149,14 @@ export function PurchaseCard({
         <div className="flex items-center gap-3">
           <Calendar className="w-4 h-4 text-gray-600 flex-shrink-0" />
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-inter">RELEASED</p>
+            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-inter">LANZAMIENTO</p>
             <p className="text-sm font-inter text-gray-300">{releaseDate}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <Clock className="w-4 h-4 text-gray-600 flex-shrink-0" />
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-inter">LAST UPDATE</p>
+            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-inter">ÚLTIMA ACTUALIZACIÓN</p>
             <p className="text-sm font-inter text-gray-300">{lastUpdate}</p>
           </div>
         </div>
@@ -165,7 +165,7 @@ export function PurchaseCard({
             <Image src={authorAvatar} alt={author} fill className="object-cover" />
           </div>
           <div>
-            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-inter">DEVELOPED BY</p>
+            <p className="text-[10px] text-gray-600 uppercase tracking-wider font-inter">DESARROLLADO POR</p>
             <p className="text-sm font-inter text-gray-300">{author}</p>
           </div>
         </div>

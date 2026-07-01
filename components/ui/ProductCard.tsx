@@ -41,7 +41,7 @@ export function ProductCard({ product, showRating = false, compact = false, clas
           <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
             {product.featured && (
               <span className="px-2 py-0.5 bg-emerald-600/90 text-white text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
-                FEATURED
+                DESTACADO
               </span>
             )}
             <CategoryBadge type={product.type} />
@@ -49,7 +49,7 @@ export function ProductCard({ product, showRating = false, compact = false, clas
           {product.isFree && (
             <div className="absolute top-3 right-3">
               <span className="px-2 py-0.5 bg-emerald-500/90 text-white text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
-                FREE
+                GRATIS
               </span>
             </div>
           )}
@@ -98,12 +98,12 @@ export function ProductCard({ product, showRating = false, compact = false, clas
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
             <div className="flex flex-col">
               <span className="text-[10px] text-gray-500 uppercase tracking-wider font-inter mb-0.5">
-                PRICE
+                PRECIO
               </span>
               <PriceDisplay price={product.price} isFree={product.isFree} size="sm" />
             </div>
             <button className="px-3 py-1.5 border border-primary/50 text-primary text-xs font-rajdhani font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-primary/10 hover:border-primary hover:scale-105">
-              {compact ? "VIEW" : "DETAILS"}
+              {compact ? "VER" : "DETALLES"}
             </button>
           </div>
         </div>

@@ -15,7 +15,7 @@ const categories = [
   { name: "Standalone", count: 1213, key: "STANDALONE" },
   { name: "QBCORE/QBOX", count: 56, key: "QBCORE/QBOX" },
   { name: "ESX", count: 33, key: "ESX" },
-  { name: "Other", count: 4, key: "Other" },
+  { name: "Otro", count: 4, key: "Other" },
   { name: "Server Dumps", count: 1, key: "Server Dumps" },
 ];
 
@@ -36,27 +36,24 @@ export default function HomePage() {
         </div>
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-dark-lighter/80 border border-white/10 rounded-full mb-8">
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
             <span className="text-xs font-inter text-gray-300 tracking-widest uppercase">
-              1,307+ Resources Available
+              +1,307 recursos disponibles
             </span>
           </div>
 
-          {/* H1 */}
           <h1 className="font-rajdhani font-bold italic uppercase leading-none mb-6">
             <span className="block text-5xl sm:text-7xl lg:text-8xl text-white">
-              ELEVATE YOUR
+              LLEVA TU SERVIDOR
             </span>
             <span className="block text-5xl sm:text-7xl lg:text-8xl text-primary">
-              SERVER EXPERIENCE
+              AL SIGUIENTE NIVEL
             </span>
           </h1>
 
           <p className="text-gray-400 text-lg font-inter max-w-2xl mx-auto mb-10 leading-relaxed">
-            Discover premium FiveM scripts, assets and resources crafted by a verified community of developers.
-            Install in minutes, elevate instantly.
+            Descubre scripts, assets y recursos premium para FiveM creados por nuestra comunidad verificada de desarrolladores hispanos. Instala en minutos.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -65,14 +62,14 @@ export default function HomePage() {
               className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-rajdhani font-bold uppercase tracking-wider text-lg rounded-2xl transition-all hover:brightness-110 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30"
             >
               <ShoppingCart className="w-5 h-5" />
-              Browse Marketplace
+              Ver Marketplace
             </Link>
             <Link
-              href="/sell"
+              href="/upload"
               className="inline-flex items-center gap-2 px-8 py-4 border border-primary/50 text-primary font-rajdhani font-bold uppercase tracking-wider text-lg rounded-2xl transition-all hover:bg-primary/10 hover:border-primary hover:scale-105"
             >
               <Plus className="w-5 h-5" />
-              Start Selling
+              Vender Scripts
             </Link>
           </div>
         </div>
@@ -82,9 +79,9 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { icon: <Code2 className="w-6 h-6 text-primary" />, label: "Approved Scripts", value: "1,307", sub: "Verified & tested" },
-            { icon: <Users className="w-6 h-6 text-primary" />, label: "Active Developers", value: "2,002", sub: "In our community" },
-            { icon: <ShieldCheck className="w-6 h-6 text-primary" />, label: "Verified Assets", value: "100%", sub: "Quality guaranteed" },
+            { icon: <Code2 className="w-6 h-6 text-primary" />, label: "Scripts Aprobados", value: "1,307", sub: "Verificados y probados" },
+            { icon: <Users className="w-6 h-6 text-primary" />, label: "Desarrolladores Activos", value: "2,002", sub: "En nuestra comunidad" },
+            { icon: <ShieldCheck className="w-6 h-6 text-primary" />, label: "Assets Verificados", value: "100%", sub: "Calidad garantizada" },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -105,7 +102,7 @@ export default function HomePage() {
 
       {/* ── SPOTLIGHT PICK ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <SectionTitle white="SPOTLIGHT" cyan="PICK" className="mb-6" />
+        <SectionTitle white="DESTACADO" cyan="DEL MES" className="mb-6" />
 
         <div className="bg-dark-lighter/70 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden">
           <div className="grid md:grid-cols-2">
@@ -119,7 +116,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-dark-lighter/80" />
               <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
                 <span className="px-3 py-1 bg-emerald-600/90 text-white text-xs font-rajdhani font-bold uppercase rounded-full tracking-wider">
-                  FEATURED PICK
+                  SELECCIÓN ESPECIAL
                 </span>
                 <CategoryBadge type={spotlight.type} />
               </div>
@@ -156,7 +153,7 @@ export default function HomePage() {
                   href={`/product/${spotlight.id}`}
                   className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary/50 text-primary font-rajdhani font-bold uppercase rounded-xl hover:bg-primary/10 hover:border-primary transition-all text-sm"
                 >
-                  VIEW DETAILS <ArrowRight className="w-4 h-4" />
+                  VER DETALLES <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -166,7 +163,7 @@ export default function HomePage() {
 
       {/* ── FEATURED DOWNLOADS (carousel) ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <SectionTitle white="FEATURED" cyan="DOWNLOADS" className="mb-6" />
+        <SectionTitle white="DESCARGAS" cyan="DESTACADAS" className="mb-6" />
         <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory">
           {featured.map((product) => (
             <ProductCard
@@ -182,12 +179,12 @@ export default function HomePage() {
       {/* ── LATEST RELEASES ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
         <div className="flex items-center justify-between mb-6">
-          <SectionTitle white="LATEST" cyan="RELEASES" />
+          <SectionTitle white="ÚLTIMAS" cyan="NOVEDADES" />
           <Link
             href="/marketplace"
             className="text-sm text-primary font-rajdhani font-bold uppercase tracking-wider hover:underline flex items-center gap-1"
           >
-            VIEW ALL <ArrowRight className="w-4 h-4" />
+            VER TODO <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -200,12 +197,12 @@ export default function HomePage() {
       {/* ── HIGHEST RATED ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
         <div className="flex items-center justify-between mb-6">
-          <SectionTitle white="HIGHEST" cyan="RATED" />
+          <SectionTitle white="MEJOR" cyan="VALORADOS" />
           <Link
             href="/marketplace"
             className="text-sm text-primary font-rajdhani font-bold uppercase tracking-wider hover:underline flex items-center gap-1"
           >
-            VIEW ALL <ArrowRight className="w-4 h-4" />
+            VER TODO <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -219,12 +216,12 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
-            <SectionTitle white="QUICK" cyan="SEARCH" className="mb-4" />
+            <SectionTitle white="BÚSQUEDA" cyan="RÁPIDA" className="mb-4" />
             <form action="/marketplace" method="get" className="flex gap-2">
               <input
                 name="q"
                 type="text"
-                placeholder="Search resources..."
+                placeholder="Buscar recursos..."
                 className="flex-1 bg-dark-lighter border border-white/10 rounded-xl px-4 py-3 text-sm font-inter text-white placeholder-gray-600 focus:outline-none focus:border-primary/60 transition-colors"
               />
               <button
@@ -232,7 +229,7 @@ export default function HomePage() {
                 className="px-6 py-3 bg-primary text-white font-rajdhani font-bold uppercase rounded-xl hover:brightness-110 transition-all flex items-center gap-2"
               >
                 <ArrowRight className="w-4 h-4" />
-                Search
+                Buscar
               </button>
             </form>
           </div>
@@ -241,7 +238,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2 mb-4">
               <span className="w-1.5 h-1.5 bg-primary rounded-full" />
               <h3 className="font-rajdhani font-bold italic uppercase text-xl tracking-wide text-white">
-                BROWSE CATEGORIES
+                EXPLORAR CATEGORÍAS
               </h3>
             </div>
             <div className="space-y-2">
@@ -273,21 +270,21 @@ export default function HomePage() {
             <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-white rounded-full translate-y-1/2" />
           </div>
           <div className="absolute right-8 top-1/2 -translate-y-1/2 text-8xl opacity-20 select-none hidden md:block">
-            🛒
+            🚀
           </div>
 
           <div className="relative z-10 max-w-xl">
             <h2 className="font-rajdhani font-bold uppercase text-4xl md:text-5xl text-dark leading-none mb-3">
-              BECOME A BOOSTER
+              CONVIÉRTETE EN BOOSTER
             </h2>
             <p className="text-dark/70 font-inter text-base mb-6">
-              Unlock exclusive perks, early access to premium scripts, and boost your server to the top of the community.
+              Desbloquea acceso anticipado a scripts premium, beneficios exclusivos y destaca tu servidor en la comunidad.
             </p>
             <Link
-              href="/upgrade"
+              href="/credits"
               className="inline-flex items-center gap-2 px-7 py-3 bg-dark text-white font-rajdhani font-bold uppercase tracking-wider rounded-2xl hover:bg-dark-lighter transition-colors text-sm"
             >
-              UPGRADE NOW <ArrowRight className="w-4 h-4" />
+              MEJORAR AHORA <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -300,7 +297,7 @@ export default function HomePage() {
           className="inline-flex items-center gap-3 px-10 py-5 border-2 border-primary/50 text-primary font-rajdhani font-bold italic uppercase text-xl tracking-wider rounded-3xl hover:bg-primary/10 hover:border-primary hover:scale-105 transition-all hover:shadow-xl hover:shadow-primary/10"
         >
           <ShoppingCart className="w-6 h-6" />
-          Explore Full Marketplace
+          Explorar Marketplace Completo
           <ArrowRight className="w-6 h-6" />
         </Link>
       </section>

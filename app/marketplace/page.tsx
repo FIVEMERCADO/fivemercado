@@ -8,17 +8,17 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import productsData from "@/data/products.json";
 
 const CATEGORIES = [
-  "All Resources",
-  "STANDALONE",
-  "QBCORE/QBOX",
-  "ESX",
-  "Server Dumps",
-  "Other",
+  { label: "Todos los Recursos", value: "Todos los Recursos" },
+  { label: "Standalone", value: "STANDALONE" },
+  { label: "QBCORE/QBOX", value: "QBCORE/QBOX" },
+  { label: "ESX", value: "ESX" },
+  { label: "Server Dumps", value: "Server Dumps" },
+  { label: "Otro", value: "Other" },
 ];
 
 export default function MarketplacePage() {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All Resources");
+  const [activeCategory, setActiveCategory] = useState("Todos los Recursos");
   const [freeFilter, setFreeFilter] = useState(false);
   const [paidFilter, setPaidFilter] = useState(false);
 
@@ -30,7 +30,7 @@ export default function MarketplacePage() {
         p.author.toLowerCase().includes(search.toLowerCase());
 
       const matchesCategory =
-        activeCategory === "All Resources" || p.type === activeCategory;
+        activeCategory === "Todos los Recursos" || p.type === activeCategory;
 
       const matchesPrice =
         !freeFilter && !paidFilter
@@ -55,11 +55,11 @@ export default function MarketplacePage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-primary/5 rounded-full blur-3xl" />
         </div>
         <h1 className="font-rajdhani font-bold italic uppercase text-5xl md:text-7xl leading-none mb-4 relative z-10">
-          <span className="text-white">MARKET</span>
-          <span className="text-primary">PLACE</span>
+          <span className="text-white">FIVE</span>
+          <span className="text-primary">MERCADO</span>
         </h1>
         <p className="text-gray-400 font-inter text-lg max-w-xl mx-auto relative z-10">
-          Browse 1,307+ verified FiveM resources. Filter by framework, price, and more.
+          Explora más de 1,307 recursos verificados para FiveM. Filtra por framework, precio y mucho más.
         </p>
       </section>
 
@@ -72,13 +72,13 @@ export default function MarketplacePage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search resources by name, author, description..."
+              placeholder="Buscar por nombre, autor, descripción..."
               className="w-full bg-dark-lighter/80 border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm font-inter text-white placeholder-gray-600 focus:outline-none focus:border-primary/60 transition-colors"
             />
           </div>
           <button className="px-6 py-3.5 bg-primary text-white font-rajdhani font-bold uppercase tracking-wider rounded-xl hover:brightness-110 transition-all flex items-center gap-2">
             <ArrowRight className="w-4 h-4" />
-            SEARCH
+            BUSCAR
           </button>
         </div>
       </div>
@@ -91,21 +91,21 @@ export default function MarketplacePage() {
               {/* Categories */}
               <div className="bg-dark-lighter/70 border border-white/5 rounded-2xl p-5">
                 <h3 className="font-rajdhani font-bold uppercase tracking-wider text-xs text-gray-500 mb-3">
-                  CATEGORIES
+                  CATEGORÍAS
                 </h3>
                 <div className="space-y-1">
                   {CATEGORIES.map((cat) => (
                     <button
-                      key={cat}
-                      onClick={() => setActiveCategory(cat)}
+                      key={cat.value}
+                      onClick={() => setActiveCategory(cat.value)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-inter transition-all text-left ${
-                        activeCategory === cat
+                        activeCategory === cat.value
                           ? "bg-primary text-white font-medium"
                           : "text-gray-400 hover:text-white hover:bg-white/5"
                       }`}
                     >
                       <Folder className="w-3.5 h-3.5 flex-shrink-0" />
-                      {cat}
+                      {cat.label}
                     </button>
                   ))}
                 </div>
@@ -114,7 +114,7 @@ export default function MarketplacePage() {
               {/* Quick Filters */}
               <div className="bg-dark-lighter/70 border border-white/5 rounded-2xl p-5">
                 <h3 className="font-rajdhani font-bold uppercase tracking-wider text-xs text-gray-500 mb-3">
-                  QUICK FILTERS
+                  FILTROS RÁPIDOS
                 </h3>
                 <div className="space-y-2">
                   <button
@@ -125,7 +125,7 @@ export default function MarketplacePage() {
                         : "border border-white/10 text-gray-400 hover:border-white/30 hover:text-white"
                     }`}
                   >
-                    🎁 Free
+                    🎁 Gratis
                   </button>
                   <button
                     onClick={() => setPaidFilter(!paidFilter)}
@@ -135,14 +135,13 @@ export default function MarketplacePage() {
                         : "border border-white/10 text-gray-400 hover:border-white/30 hover:text-white"
                     }`}
                   >
-                    💎 Paid
+                    💎 Premium
                   </button>
                 </div>
               </div>
 
-              {/* Results count */}
               <p className="text-xs text-gray-600 font-inter text-center">
-                Showing <span className="text-primary font-bold">{filtered.length}</span> resources
+                Mostrando <span className="text-primary font-bold">{filtered.length}</span> recursos
               </p>
             </div>
           </aside>
@@ -152,15 +151,15 @@ export default function MarketplacePage() {
             <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 flex-1">
               {CATEGORIES.map((cat) => (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  key={cat.value}
+                  onClick={() => setActiveCategory(cat.value)}
                   className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-rajdhani font-bold uppercase tracking-wider transition-all ${
-                    activeCategory === cat
+                    activeCategory === cat.value
                       ? "bg-primary text-white"
                       : "border border-white/10 text-gray-400 hover:text-white"
                   }`}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               ))}
             </div>
@@ -173,7 +172,7 @@ export default function MarketplacePage() {
                     : "border border-white/10 text-gray-400"
                 }`}
               >
-                🎁 Free
+                🎁 Gratis
               </button>
               <button
                 onClick={() => setPaidFilter(!paidFilter)}
@@ -183,7 +182,7 @@ export default function MarketplacePage() {
                     : "border border-white/10 text-gray-400"
                 }`}
               >
-                💎 Paid
+                💎 Premium
               </button>
             </div>
           </div>
@@ -194,10 +193,10 @@ export default function MarketplacePage() {
               <div className="flex flex-col items-center justify-center py-24 text-center">
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="font-rajdhani font-bold italic uppercase text-2xl text-white mb-2">
-                  NO RESULTS FOUND
+                  SIN RESULTADOS
                 </h3>
                 <p className="text-gray-500 font-inter text-sm">
-                  Try adjusting your search or filters.
+                  Intenta ajustar los filtros o el término de búsqueda.
                 </p>
               </div>
             ) : (
