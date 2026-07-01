@@ -98,11 +98,26 @@ export default function ProductDetailPage({ params }: PageProps) {
     <div className="space-y-4">
       {product.reviews > 0 ? (
         <>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="text-center">
-              <p className="text-4xl font-rajdhani font-bold text-white">{product.rating}</p>
-              <StarRating rating={product.rating} showCount={false} />
+          <div className="flex items-center gap-6 mb-6 p-5 bg-dark/50 border border-white/5 rounded-2xl">
+            <div className="text-center flex-shrink-0">
+              <p className="text-5xl font-rajdhani font-bold text-white">{product.rating}</p>
+              <StarRating rating={product.rating} showCount={false} className="justify-center mt-1" />
               <p className="text-xs text-gray-500 font-inter mt-1">{product.reviews} reseñas</p>
+            </div>
+            <div className="flex-1 space-y-1.5">
+              {[5, 4, 3, 2, 1].map((star) => {
+                const pct = star === Math.round(product.rating) ? 75 : star === Math.round(product.rating) - 1 ? 20 : star > product.rating ? 0 : 5;
+                return (
+                  <div key={star} className="flex items-center gap-2 text-xs font-inter">
+                    <span className="text-gray-500 w-3 text-right">{star}</span>
+                    <span className="text-yellow-400 text-xs">★</span>
+                    <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-yellow-400/60 rounded-full transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="text-gray-600 w-6">{pct}%</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
           {/* Placeholder reviews */}
@@ -208,7 +223,7 @@ export default function ProductDetailPage({ params }: PageProps) {
         </div>
 
         {/* Main layout */}
-        <div className="grid lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left: image + tabs (8 cols) */}
           <div className="lg:col-span-8 space-y-6">
             {/* Preview image */}

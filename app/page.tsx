@@ -111,9 +111,9 @@ export default function HomePage() {
                 src={spotlight.image}
                 alt={spotlight.title}
                 fill
-                className="object-cover"
+                className="object-cover brightness-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-dark-lighter/80" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-dark-lighter/70" />
               <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
                 <span className="px-3 py-1 bg-emerald-600/90 text-white text-xs font-rajdhani font-bold uppercase rounded-full tracking-wider">
                   SELECCIÓN ESPECIAL

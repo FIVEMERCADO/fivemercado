@@ -48,7 +48,7 @@ export function PriceDisplay({ price, isFree, size = "md", className }: PriceDis
       )}
     >
       <span className={cn("select-none", iconSizes[size])}>🪙</span>
-      <span className="text-white">${price.toFixed(2)}</span>
+      <span className="text-white">{price % 1 === 0 ? price.toFixed(0) : price.toFixed(2)}</span>
     </span>
   );
 }

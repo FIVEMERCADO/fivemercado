@@ -84,7 +84,7 @@ export default function MarketplacePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <aside className="hidden lg:block w-60 flex-shrink-0">
             <div className="sticky top-24 space-y-6">
@@ -143,11 +143,27 @@ export default function MarketplacePage() {
               <p className="text-xs text-gray-600 font-inter text-center">
                 Mostrando <span className="text-primary font-bold">{filtered.length}</span> recursos
               </p>
+
+              {/* Sell banner */}
+              <div className="bg-gradient-to-br from-primary/20 to-cyan-500/5 border border-primary/30 rounded-2xl p-5">
+                <h3 className="font-rajdhani font-bold uppercase text-white text-sm tracking-wider mb-2">
+                  🚀 VENDE TU TRABAJO
+                </h3>
+                <p className="text-xs text-gray-400 font-inter mb-4 leading-relaxed">
+                  Únete a nuestro programa de desarrolladores y empieza a ganar créditos.
+                </p>
+                <a
+                  href="/upload"
+                  className="block w-full text-center py-2.5 bg-primary text-dark text-xs font-rajdhani font-black uppercase tracking-widest rounded-xl hover:brightness-110 transition-all"
+                >
+                  SABER MÁS
+                </a>
+              </div>
             </div>
           </aside>
 
           {/* Mobile filters */}
-          <div className="lg:hidden w-full mb-6 flex flex-wrap gap-2">
+          <div className="lg:hidden mb-6 flex flex-wrap gap-2">
             <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 flex-1">
               {CATEGORIES.map((cat) => (
                 <button
