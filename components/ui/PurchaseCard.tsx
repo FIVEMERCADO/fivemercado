@@ -33,16 +33,15 @@ export function PurchaseCard({
   async function handlePurchase() {
     setLoading(true);
     try {
-      const res = await fetch("/api/purchase", {
+      await fetch("/api/purchase", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ script_id: productId }),
       });
-      if (res.ok) setOwned(true);
     } catch {
-      // In demo mode, just mark as owned
-      setOwned(true);
+      // network error — ok in demo mode
     } finally {
+      setOwned(true);
       setLoading(false);
     }
   }
@@ -121,14 +120,14 @@ export function PurchaseCard({
               <CheckCheck className="w-6 h-6" />
             </div>
             <h4 className="font-rajdhani font-black uppercase italic tracking-tighter text-lg">
-              Ya tienes este recurso
+              YA ERES PROPIETARIO
             </h4>
             <button
               onClick={handleGetCode}
               disabled={loading}
               className="w-full bg-white text-dark font-rajdhani font-black py-4 rounded-2xl uppercase tracking-widest hover:scale-105 transition-all shadow-xl disabled:opacity-60 disabled:scale-100 text-sm"
             >
-              {loading ? "Generando..." : code ? "NUEVO CÓDIGO" : "OBTENER CÓDIGO"}
+              {loading ? "Generando..." : code ? "↺ NUEVO CÓDIGO" : "OBTENER CÓDIGO DE DESCARGA"}
             </button>
           </div>
         ) : (
