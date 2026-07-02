@@ -126,15 +126,15 @@ export function applyHandlingChanges(
 export function parseHandlingXml(xml: string): Record<string, number> {
   const result: Record<string, number> = {};
   // value="..." attribute
-  for (const m of xml.matchAll(/<(\w+)\s+value="([^"]+)"\s*\/?>/gi)) {
+  Array.from(xml.matchAll(/<(\w+)\s+value="([^"]+)"\s*\/?>/gi)).forEach(m => {
     const v = parseFloat(m[2]);
     if (!isNaN(v)) result[m[1]] = v;
-  }
+  });
   // <fieldName>VALUE</fieldName>
-  for (const m of xml.matchAll(/<(\w+)>([^<]+)<\/\s*\w+\s*>/gi)) {
+  Array.from(xml.matchAll(/<(\w+)>([^<]+)<\/\s*\w+\s*>/gi)).forEach(m => {
     const v = parseFloat(m[2]);
     if (!isNaN(v)) result[m[1]] = v;
-  }
+  });
   return result;
 }
 

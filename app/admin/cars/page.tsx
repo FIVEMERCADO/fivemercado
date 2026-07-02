@@ -33,14 +33,14 @@ const EMPTY_CAR = {
 // ── Parsea el XML del handling.meta en el cliente ─────────────────────────────
 function parseHandlingXml(xml: string): Record<string, number> {
   const result: Record<string, number> = {};
-  for (const m of xml.matchAll(/<(\w+)\s+value="([^"]+)"\s*\/?>/gi)) {
+  Array.from(xml.matchAll(/<(\w+)\s+value="([^"]+)"\s*\/?>/gi)).forEach(m => {
     const v = parseFloat(m[2]);
     if (!isNaN(v)) result[m[1]] = v;
-  }
-  for (const m of xml.matchAll(/<(\w+)>([^<]+)<\/\s*\w+\s*>/gi)) {
+  });
+  Array.from(xml.matchAll(/<(\w+)>([^<]+)<\/\s*\w+\s*>/gi)).forEach(m => {
     const v = parseFloat(m[2]);
     if (!isNaN(v)) result[m[1]] = v;
-  }
+  });
   return result;
 }
 
