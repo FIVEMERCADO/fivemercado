@@ -1,5 +1,4 @@
-// Genera el archivo handling.meta XML para FiveM
-// basado en los valores del cliente
+// Manejo de archivos handling.meta para FiveM
 
 export interface HandlingValues {
   fMass: number;
@@ -99,7 +98,47 @@ export function generateHandlingMeta(handlingName: string, v: HandlingValues): s
 </CHandlingDataMgr>`;
 }
 
-// Calcula stats visuales (0-100) a partir de los valores de handling
+// ── Reemplaza solo los campos editados en el XML original ─────────────────────
+// Garantiza que strModelFlags, SubHandlingData, vecCentreOfMassOffset, etc.
+// siempre vengan del archivo original del carro — nunca inventados.
+export function applyHandlingChanges(
+  originalXml: string,
+  changes: Record<string, number>
+): string {
+  let xml = originalXml;
+  for (const [field, value] of Object.entries(changes)) {
+    // Patrón: <fieldName value="1.234567" />  (todos los campos float/int)
+    xml = xml.replace(
+      new RegExp(`(<${field}\\s+value=")[^"]*("\\s*/?>)`, "gi"),
+      `$1${value.toFixed(6)}$2`
+    );
+    // Patrón: <fieldName>VALUE</fieldName>  (fallback para campos de texto como nMonetaryValue)
+    xml = xml.replace(
+      new RegExp(`(<${field}>)[^<]*(</\\s*${field}\\s*>)`, "gi"),
+      `$1${value}$2`
+    );
+  }
+  return xml;
+}
+
+// ── Extrae campos numéricos del XML como Record<string, number> ────────────────
+// Útil para rellenar el editor con valores del handling.meta original
+export function parseHandlingXml(xml: string): Record<string, number> {
+  const result: Record<string, number> = {};
+  // value="..." attribute
+  for (const m of xml.matchAll(/<(\w+)\s+value="([^"]+)"\s*\/?>/gi)) {
+    const v = parseFloat(m[2]);
+    if (!isNaN(v)) result[m[1]] = v;
+  }
+  // <fieldName>VALUE</fieldName>
+  for (const m of xml.matchAll(/<(\w+)>([^<]+)<\/\s*\w+\s*>/gi)) {
+    const v = parseFloat(m[2]);
+    if (!isNaN(v)) result[m[1]] = v;
+  }
+  return result;
+}
+
+// ── Calcula stats visuales (0-100) a partir de los valores de handling
 export function calcVisualStats(v: Partial<HandlingValues>) {
   const speed        = Math.min(100, Math.round(((v.fInitialDriveMaxFlatVel ?? 150) / 320) * 100));
   const acceleration = Math.min(100, Math.round(((v.fInitialDriveForce ?? 0.3) / 0.6) * 100));

@@ -22,7 +22,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   // Filtrar solo campos permitidos
   const allowed = [
     "name", "brand", "category", "description", "price", "is_free",
-    "image_url", "r2_path", "handling_name", "handling", "stats", "is_published",
+    "image_url", "r2_path", "handling_name", "handling", "handling_xml", "stats", "is_published",
   ];
   const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
   for (const key of allowed) {

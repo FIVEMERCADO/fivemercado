@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
 
   const body = await req.json();
-  const { name, brand, category, description, price, is_free, image_url, r2_path, handling_name, handling, stats } = body;
+  const { name, brand, category, description, price, is_free, image_url, r2_path, handling_name, handling, stats, handling_xml } = body;
 
   if (!name || !brand || !handling_name) {
     return NextResponse.json({ error: "Faltan campos obligatorios: name, brand, handling_name" }, { status: 400 });
@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
       r2_path: r2_path || null,
       handling_name: handling_name.toUpperCase(),
       handling: handling ?? {},
+      handling_xml: handling_xml || null,
       stats: stats ?? { speed: 50, acceleration: 50, braking: 50, handling: 50 },
       is_published: false,
     })
