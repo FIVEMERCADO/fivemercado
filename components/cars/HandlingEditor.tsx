@@ -1,313 +1,443 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { AlertTriangle, CheckCircle2, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { AlertTriangle, CheckCircle2, RotateCcw, HelpCircle, Flame, ChevronRight } from "lucide-react";
 import knowledgeRaw from "@/lib/handling_knowledge.json";
 import { calcVisualStats } from "@/lib/handling-xml";
 
-// ── Tipos ─────────────────────────────────────────────────────────────────────
-interface FieldStats { min: number; max: number; avg: number; p25: number; p50: number; p75: number; }
-interface KnowledgeBase {
-  total_cars: number;
-  global: { fields: Record<string, FieldStats> };
-  categories: Record<string, { count: number; fields: Record<string, FieldStats> }>;
-}
-const KB = knowledgeRaw as KnowledgeBase;
+// ── Types ──────────────────────────────────────────────────────────────────────
+interface FieldStats { min: number; max: number; avg: number; p25: number; p50: number; p75: number }
+interface KB { total_cars: number; global: { fields: Record<string, FieldStats> }; categories: Record<string, { count: number; fields: Record<string, FieldStats> }> }
+const KB = knowledgeRaw as KB;
 
-// ── Definición de parámetros editables ───────────────────────────────────────
-interface ParamDef {
-  key: string;
-  label: string;
-  description: string;
-  unit: string;
-  step: number;
-  decimals: number;
-  group: string;
-}
+// ── Solo los 8 parámetros que un jugador entiende ─────────────────────────────
+interface Param { key: string; label: string; unit: string; step: number; decimals: number; tip: string; game_tip: string; emoji: string }
 
-const PARAMS: ParamDef[] = [
-  // Motor
-  { key: "fInitialDriveForce",    label: "Fuerza del Motor",        description: "Potencia y aceleración del vehículo. Más alto = acelera más rápido.",            unit: "",    step: 0.01, decimals: 3, group: "Motor" },
-  { key: "fInitialDriveMaxFlatVel", label: "Velocidad Máxima",      description: "Velocidad tope en km/h en terreno plano.",                                       unit: "km/h",step: 5,    decimals: 0, group: "Motor" },
-  { key: "nInitialDriveGears",    label: "Marchas",                  description: "Número de marchas de la transmisión.",                                            unit: "",    step: 1,    decimals: 0, group: "Motor" },
-  { key: "fDriveInertia",         label: "Inercia del Motor",        description: "Qué tan rápido responde el motor. Menos = respuesta más brusca.",                 unit: "",    step: 0.05, decimals: 2, group: "Motor" },
-  { key: "fDriveBiasFront",       label: "Tracción Delantera",       description: "0 = tracción trasera (sport), 0.5 = AWD, 1 = tracción delantera.",               unit: "",    step: 0.05, decimals: 2, group: "Motor" },
-  // Frenado
-  { key: "fBrakeForce",           label: "Potencia de Frenos",       description: "Qué tan fuerte frena el vehículo. Más alto = frena más corto.",                  unit: "",    step: 0.05, decimals: 2, group: "Frenado" },
-  { key: "fHandBrakeForce",       label: "Freno de Mano",            description: "Potencia del freno de mano para derrapar.",                                       unit: "",    step: 0.05, decimals: 2, group: "Frenado" },
-  { key: "fBrakeBiasFront",       label: "Balance de Frenos",        description: "0 = todo atrás, 0.5 = equilibrado, 1 = todo delante.",                           unit: "",    step: 0.02, decimals: 2, group: "Frenado" },
-  // Tracción
-  { key: "fTractionCurveMax",     label: "Tracción Máxima",          description: "Agarre máximo de los neumáticos. Más alto = mejor grip.",                        unit: "",    step: 0.05, decimals: 2, group: "Tracción" },
-  { key: "fTractionCurveMin",     label: "Tracción Mínima",          description: "Agarre mínimo (al derrapar). Más bajo = derrapa más.",                           unit: "",    step: 0.05, decimals: 2, group: "Tracción" },
-  { key: "fTractionBiasFront",    label: "Balance de Tracción",      description: "Distribución de tracción. 0.5 = equilibrado.",                                   unit: "",    step: 0.02, decimals: 2, group: "Tracción" },
-  { key: "fSteeringLock",         label: "Ángulo de Dirección",      description: "Cuánto giran las ruedas. Más alto = giros más cerrados.",                        unit: "°",   step: 1,    decimals: 0, group: "Tracción" },
-  // Suspensión
-  { key: "fSuspensionForce",      label: "Dureza Suspensión",        description: "1-2 = suave, 3-4 = dura/sport. Afecta el rebote.",                              unit: "",    step: 0.1,  decimals: 1, group: "Suspensión" },
-  { key: "fSuspensionCompDamp",   label: "Amortiguación Compresión", description: "Qué tan rápido se comprime la suspensión al golpear.",                           unit: "",    step: 0.1,  decimals: 1, group: "Suspensión" },
-  { key: "fSuspensionReboundDamp",label: "Amortiguación Rebote",     description: "Qué tan rápido vuelve la suspensión a su posición.",                             unit: "",    step: 0.1,  decimals: 1, group: "Suspensión" },
-  { key: "fSuspensionUpperLimit", label: "Límite Superior Suspensión",description: "Recorrido hacia arriba. Más alto = más altura.",                                unit: "m",   step: 0.01, decimals: 2, group: "Suspensión" },
-  { key: "fSuspensionLowerLimit", label: "Límite Inferior Suspensión",description: "Recorrido hacia abajo (negativo = más bajo).",                                  unit: "m",   step: 0.01, decimals: 2, group: "Suspensión" },
-  // Masa
-  { key: "fMass",                 label: "Masa del Vehículo",        description: "Peso en kg. Más pesado = más estable pero menos ágil.",                          unit: "kg",  step: 50,   decimals: 0, group: "Físicas" },
-  { key: "fInitialDragCoeff",     label: "Resistencia al Aire",      description: "Fricción aerodinámica. Más alto = pierde velocidad más rápido.",                 unit: "",    step: 0.5,  decimals: 1, group: "Físicas" },
-  { key: "fCollisionDamageMult",  label: "Daño por Colisión",        description: "Multiplicador de daño al chocar. 0 = indestructible, 2 = muy frágil.",           unit: "x",   step: 0.1,  decimals: 1, group: "Físicas" },
+const PARAMS: Param[] = [
+  {
+    key: "fInitialDriveMaxFlatVel", label: "Velocidad Máxima",   unit: "km/h", step: 5,    decimals: 0,
+    emoji: "🏎", tip: "Velocidad tope en recta",
+    game_tip: "Cuanto más alto, más velocidad máxima alcanza el carro. Para sport/supercar sube a 280–320 km/h.",
+  },
+  {
+    key: "fInitialDriveForce",      label: "Potencia del Motor", unit: "",     step: 0.01, decimals: 3,
+    emoji: "⚡", tip: "Fuerza de aceleración",
+    game_tip: "Determina qué tan fuerte empuja el motor. Muy alto hace las ruedas patinar al salir.",
+  },
+  {
+    key: "nInitialDriveGears",      label: "Número de Marchas",  unit: "vel",  step: 1,    decimals: 0,
+    emoji: "⚙️", tip: "Velocidades del gearbox",
+    game_tip: "Más marchas = aceleración más suave y progresiva. Sport: 6-7, Supercar: 7-8.",
+  },
+  {
+    key: "fBrakeForce",             label: "Potencia de Frenos", unit: "",     step: 0.05, decimals: 2,
+    emoji: "🛑", tip: "Qué tan corto frena",
+    game_tip: "Más alto frena más corto. Muy alto puede bloquear ruedas en curvas. Sport: 0.6–0.9.",
+  },
+  {
+    key: "fHandBrakeForce",         label: "Freno de Mano",      unit: "",     step: 0.1,  decimals: 1,
+    emoji: "💨", tip: "Para drifts y handbrake turns",
+    game_tip: "Alto para hacer drifts y derrapes controlados. Bajo para grip en pista.",
+  },
+  {
+    key: "fTractionCurveMax",       label: "Grip de Tracción",   unit: "",     step: 0.05, decimals: 2,
+    emoji: "🛞", tip: "Agarre al acelerar",
+    game_tip: "Más alto = más grip, menos derrape. Bajo = derrapa fácil (drift). Sport: 2.0–2.8.",
+  },
+  {
+    key: "fSuspensionForce",        label: "Dureza Suspensión",  unit: "",     step: 0.1,  decimals: 1,
+    emoji: "🌀", tip: "Suave ↔ Dura",
+    game_tip: "1-2 = suave (cómoda). 3-4 = sport (pegada al suelo). 5+ = competición (muy dura).",
+  },
+  {
+    key: "fDriveBiasFront",         label: "Distribución 4x4",   unit: "",     step: 0.1,  decimals: 2,
+    emoji: "🚗", tip: "0=Trasera · 0.5=AWD · 1=Delantera",
+    game_tip: "0 = tracción solo trasera (RWD, sport). 0.5 = 4x4 total. 1 = tracción delantera (FWD).",
+  },
 ];
 
-const GROUPS = ["Motor", "Frenado", "Tracción", "Suspensión", "Físicas"];
+// ── Presets ───────────────────────────────────────────────────────────────────
+interface Preset { label: string; color: string; glowClass: string; desc: string; values: Partial<Record<string, number>> }
+const PRESETS: Record<string, Preset> = {
+  stock:   { label: "Original",  color: "#ffffff60",  glowClass: "",                     desc: "Configuración original del fabricante",          values: {} },
+  race:    { label: "Carrera",   color: "#ff6600",    glowClass: "shadow-primary/30",     desc: "Máxima velocidad y frenado agresivo",            values: { fInitialDriveForce: 0.48, fBrakeForce: 1.1, fTractionCurveMax: 2.8, fSuspensionForce: 3.5, fInitialDriveMaxFlatVel: 300, nInitialDriveGears: 7 } },
+  drift:   { label: "Drift",     color: "#ec4899",    glowClass: "shadow-pink/30",        desc: "Trasera suelta para derrapes controlados",       values: { fInitialDriveForce: 0.4,  fTractionCurveMax: 1.3, fHandBrakeForce: 1.8, fBrakeForce: 0.6, fDriveBiasFront: 0, nInitialDriveGears: 6 } },
+  grip:    { label: "Grip",      color: "#00ff9f",    glowClass: "shadow-neon/30",        desc: "Máximo agarre para circuitos técnicos",          values: { fTractionCurveMax: 3.2, fSuspensionForce: 3.8, fHandBrakeForce: 0.3, fBrakeForce: 0.9, fDriveBiasFront: 0 } },
+  offroad: { label: "Offroad",   color: "#facc15",    glowClass: "shadow-yellow-400/30",  desc: "Suspensión alta y tracción total para campo",    values: { fSuspensionForce: 1.2, fDriveBiasFront: 0.5, fTractionCurveMax: 2.0, fInitialDriveMaxFlatVel: 180, nInitialDriveGears: 5 } },
+  street:  { label: "Calle",     color: "#7c3aed",    glowClass: "shadow-secondary/30",   desc: "Balance diario — rápido y cómodo para tráfico", values: { fInitialDriveForce: 0.32, fBrakeForce: 0.7, fSuspensionForce: 2.0, fTractionCurveMax: 2.3, fInitialDriveMaxFlatVel: 220 } },
+};
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function getFieldBounds(field: string, category: string): { min: number; max: number; avg: number; p25: number; p75: number } | null {
-  const catStats = KB.categories[category]?.fields[field];
-  const globalStats = KB.global.fields[field];
-  const s = catStats ?? globalStats;
-  if (!s) return null;
-  return { min: s.min, max: s.max, avg: s.avg, p25: s.p25, p75: s.p75 };
+function getBounds(key: string, cat: string) {
+  return KB.categories[cat]?.fields[key] ?? KB.global.fields[key] ?? null;
 }
-
-type ValidationLevel = "ok" | "warn" | "danger";
-function validateValue(value: number, bounds: { p25: number; p75: number; min: number; max: number } | null): ValidationLevel {
+type Level = "ok" | "warn" | "danger";
+function getLevel(val: number, bounds: ReturnType<typeof getBounds>): Level {
   if (!bounds) return "ok";
-  if (value < bounds.min || value > bounds.max) return "danger";
-  if (value < bounds.p25 || value > bounds.p75) return "warn";
+  if (val < bounds.min || val > bounds.max) return "danger";
+  if (val < bounds.p25 || val > bounds.p75) return "warn";
   return "ok";
 }
-
-function levelColor(level: ValidationLevel) {
-  if (level === "danger") return "text-red-400";
-  if (level === "warn")   return "text-yellow-400";
-  return "text-neon";
+function pct(val: number, min: number, max: number) {
+  return Math.min(100, Math.max(0, ((val - min) / (max - min)) * 100));
 }
 
-function StatBar({ label, value, color = "bg-primary" }: { label: string; value: number; color?: string }) {
+// ── Gauge SVG animado ─────────────────────────────────────────────────────────
+function StatGauge({ label, value, color, emoji, delta }: { label: string; value: number; color: string; emoji: string; delta: number }) {
+  const R = 28;
+  const circ = 2 * Math.PI * R;
+  const offset = circ - (value / 100) * circ;
   return (
-    <div>
-      <div className="flex justify-between text-xs font-mono mb-1">
-        <span className="text-white/50 uppercase tracking-wider">{label}</span>
-        <span className="text-white">{value}</span>
+    <div className="flex flex-col items-center">
+      <div className="relative w-[68px] h-[68px]">
+        <svg className="-rotate-90 w-full h-full" viewBox="0 0 68 68">
+          {/* Track */}
+          <circle cx="34" cy="34" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="5" />
+          {/* Progress arc */}
+          <circle
+            cx="34" cy="34" r={R} fill="none"
+            stroke={color} strokeWidth="5" strokeLinecap="round"
+            strokeDasharray={circ}
+            strokeDashoffset={offset}
+            style={{ transition: "stroke-dashoffset 0.7s cubic-bezier(0.34,1.56,0.64,1)" }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-xl leading-none">{emoji}</span>
+          <span className="font-orbitron font-black text-[11px] mt-0.5" style={{ color }}>{value}</span>
+        </div>
       </div>
-      <div className="h-1.5 bg-dark rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${value}%` }} />
+      <p className="font-mono text-[9px] text-white/25 uppercase tracking-wider mt-1">{label}</p>
+      {delta !== 0 && (
+        <p className={`font-mono text-[9px] font-bold ${delta > 0 ? "text-neon" : "text-red-400"}`}>
+          {delta > 0 ? "+" : ""}{delta}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ── Slider de parámetro ───────────────────────────────────────────────────────
+function ParamSlider({ param, value, original, bounds, catKey, helpActive, onHelp, onChange, onReset }: {
+  param: Param; value: number; original: number; bounds: ReturnType<typeof getBounds>;
+  catKey: string; helpActive: boolean; onHelp: () => void;
+  onChange: (v: number) => void; onReset: () => void;
+}) {
+  const level   = getLevel(value, bounds);
+  const changed = value !== original;
+  const sMin    = bounds ? Math.min(bounds.min * 0.8, original * 0.5, 0) : 0;
+  const sMax    = bounds ? Math.max(bounds.max * 1.2, original * 2, 1)   : 10;
+  const fillPct = pct(value, sMin, sMax);
+  const origPct = pct(original, sMin, sMax);
+
+  const accent = level === "danger" ? "#ef4444" : level === "warn" ? "#facc15" : changed ? "#ff6600" : "rgba(255,255,255,0.25)";
+
+  return (
+    <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+      changed       ? "border-primary/30 bg-primary/3"       :
+      level === "danger" ? "border-red-500/20 bg-red-500/3"   :
+      level === "warn"   ? "border-yellow-500/20"             :
+      "border-white/6 hover:border-white/10"
+    }`}>
+      <div className="p-4">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-2xl select-none">{param.emoji}</span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center flex-wrap gap-2">
+              <span className="font-rajdhani font-bold text-white text-sm">{param.label}</span>
+              {param.unit && (
+                <span className="font-mono text-[9px] text-white/25 border border-white/10 px-1.5 py-0.5 rounded">{param.unit}</span>
+              )}
+              {changed && (
+                <span className="font-mono text-[9px] text-white/25">
+                  orig: <span className="text-primary/60">{original.toFixed(param.decimals)}</span>
+                </span>
+              )}
+            </div>
+            <p className="text-[11px] text-white/30 font-rajdhani mt-0.5">{param.tip}</p>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {changed && (
+              <button onClick={onReset} title="Restaurar original"
+                className="w-7 h-7 rounded-lg bg-dark/60 border border-white/8 flex items-center justify-center text-white/30 hover:text-primary hover:border-primary/30 transition-all">
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <button onClick={onHelp}
+              className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-all ${
+                helpActive ? "bg-secondary/10 border-secondary/40 text-secondary" : "bg-dark/60 border-white/8 text-white/30 hover:text-secondary hover:border-secondary/30"
+              }`}>
+              <HelpCircle className="w-3.5 h-3.5" />
+            </button>
+            <input
+              type="number" value={value} step={param.step}
+              onChange={e => { const v = parseFloat(e.target.value); if (!isNaN(v)) onChange(parseFloat(v.toFixed(param.decimals))); }}
+              className="w-[72px] text-right font-orbitron font-bold text-sm rounded-xl px-2.5 py-1.5 border bg-dark/80 outline-none focus:ring-1 transition-all"
+              style={{ color: accent, borderColor: `${accent}50`, boxShadow: changed ? `0 0 8px ${accent}25` : "none" }}
+            />
+          </div>
+        </div>
+
+        {/* Tooltip de ayuda */}
+        {helpActive && (
+          <div className="mb-3 px-3 py-2.5 rounded-xl bg-secondary/5 border border-secondary/15 text-[11px] text-secondary/80 font-rajdhani leading-relaxed flex gap-2">
+            <span className="flex-shrink-0">💡</span>
+            <div>
+              {param.game_tip}
+              {bounds && (
+                <span className="block mt-1.5 font-mono text-white/25 text-[10px]">
+                  Zona normal para {catKey}: {bounds.p25}–{bounds.p75} · Promedio: {bounds.avg}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Track + slider */}
+        <div className="relative">
+          <div className="relative h-3 bg-dark/60 rounded-full">
+            {/* Zona p25-p75 saludable */}
+            {bounds && (
+              <div className="absolute top-0 bottom-0 rounded-full bg-neon/10 pointer-events-none"
+                style={{ left: `${pct(bounds.p25, sMin, sMax)}%`, right: `${100 - pct(bounds.p75, sMin, sMax)}%` }} />
+            )}
+            {/* Fill */}
+            <div className="absolute top-0 left-0 h-full rounded-full pointer-events-none"
+              style={{ width: `${fillPct}%`, backgroundColor: accent, boxShadow: changed ? `0 0 10px ${accent}60` : "none", transition: "width 0.25s ease, background-color 0.3s" }}
+            />
+            {/* Marcador del original */}
+            {changed && (
+              <div className="absolute top-1/2 -translate-y-1/2 w-1.5 h-4 rounded-sm bg-white/40 pointer-events-none z-10"
+                style={{ left: `calc(${origPct}% - 3px)` }} />
+            )}
+            <input type="range" min={sMin} max={sMax} step={param.step} value={value}
+              onChange={e => onChange(parseFloat(parseFloat(e.target.value).toFixed(param.decimals)))}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
+          <div className="flex justify-between mt-1.5 text-[9px] font-mono">
+            <span className="text-white/12">{sMin.toFixed(param.decimals)}</span>
+            {bounds && <span className="text-neon/20">zona normal: {bounds.p25}–{bounds.p75}</span>}
+            <span className="text-white/12">{sMax.toFixed(param.decimals)}</span>
+          </div>
+        </div>
+
+        {/* Advertencia inline */}
+        {level !== "ok" && bounds && (
+          <div className={`mt-2 flex items-center gap-1.5 text-[10px] font-mono ${level === "danger" ? "text-red-400" : "text-yellow-400"}`}>
+            <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+            {level === "danger"
+              ? `Fuera del rango real (${bounds.min}–${bounds.max}). Puede romper el handling en-game.`
+              : `Inusual para ${catKey}. Zona normal: ${bounds.p25}–${bounds.p75}`}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-// ── Componente principal ──────────────────────────────────────────────────────
-interface HandlingEditorProps {
-  initialHandling: Record<string, number>;
+// ── Props ─────────────────────────────────────────────────────────────────────
+export interface HandlingEditorProps {
+  originalHandling: Record<string, number>;
   handlingName: string;
   category: string;
-  onSave?: (values: Record<string, number>) => void;
+  onConfirm?: (values: Record<string, number>) => void;
   saving?: boolean;
+  editPrice?: number;
 }
 
-export function HandlingEditor({ initialHandling, handlingName, category, onSave, saving }: HandlingEditorProps) {
-  const [values, setValues] = useState<Record<string, number>>(initialHandling);
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({ Motor: true });
-  const [showXml, setShowXml] = useState(false);
+// ── Componente principal ──────────────────────────────────────────────────────
+export function HandlingEditor({ originalHandling, handlingName, category, onConfirm, saving, editPrice = 0 }: HandlingEditorProps) {
+  const [values, setValues]           = useState<Record<string, number>>(originalHandling);
+  const [activeHelp, setActiveHelp]   = useState<string | null>(null);
+  const [activePreset, setActivePreset] = useState("stock");
+  const [flash, setFlash]             = useState(false);
+  const [mounted, setMounted]         = useState(false);
 
-  const catKey = category in KB.categories ? category : "Sport";
-  const catData = KB.categories[catKey];
-  const stats = calcVisualStats(values);
+  useEffect(() => { setMounted(true); }, []);
 
-  const set = useCallback((key: string, val: number) => {
-    setValues((prev) => ({ ...prev, [key]: val }));
-  }, []);
+  const catKey   = category in KB.categories ? category : "Sport";
+  const catCount = KB.categories[catKey]?.count ?? 0;
 
-  const toggleGroup = (g: string) => setOpenGroups((prev) => ({ ...prev, [g]: !prev[g] }));
+  const origStats = useMemo(() => calcVisualStats(originalHandling), [originalHandling]);
+  const currStats = useMemo(() => calcVisualStats(values), [values]);
 
-  const resetToAvg = () => {
-    const next = { ...values };
-    for (const p of PARAMS) {
-      const b = getFieldBounds(p.key, catKey);
-      if (b) next[p.key] = parseFloat(b.avg.toFixed(p.decimals));
-    }
-    setValues(next);
-  };
+  const changedParams = PARAMS.filter(p => {
+    const curr = values[p.key] ?? originalHandling[p.key];
+    return curr !== undefined && curr !== originalHandling[p.key];
+  });
+  const hasChanges = changedParams.length > 0;
 
-  // Cuenta warnings/errors globales
   let warns = 0, errors = 0;
   for (const p of PARAMS) {
-    const b = getFieldBounds(p.key, catKey);
-    const level = validateValue(values[p.key] ?? 0, b);
-    if (level === "warn")   warns++;
-    if (level === "danger") errors++;
+    const lvl = getLevel(values[p.key] ?? originalHandling[p.key] ?? 0, getBounds(p.key, catKey));
+    if (lvl === "warn")   warns++;
+    if (lvl === "danger") errors++;
   }
 
+  const setVal = useCallback((key: string, v: number) => {
+    setValues(prev => ({ ...prev, [key]: v }));
+    setActivePreset("custom");
+  }, []);
+
+  const resetParam = useCallback((key: string) => {
+    setValues(prev => ({ ...prev, [key]: originalHandling[key] }));
+  }, [originalHandling]);
+
+  const applyPreset = (id: string) => {
+    setFlash(true);
+    setTimeout(() => setFlash(false), 400);
+    if (id === "stock") {
+      setValues({ ...originalHandling });
+    } else {
+      const preset = PRESETS[id];
+      setValues(prev => {
+        const next = { ...prev };
+        for (const [k, v] of Object.entries(preset.values)) {
+          if (next[k] !== undefined) next[k] = v as number;
+        }
+        return next;
+      });
+    }
+    setActivePreset(id);
+  };
+
+  if (!mounted) return <div className="h-96 animate-pulse bg-dark-mid rounded-2xl" />;
+
+  const GAUGES = [
+    { label: "Velocidad",   emoji: "🏎", val: currStats.speed,        orig: origStats.speed,        color: "#ff6600" },
+    { label: "Aceleración", emoji: "⚡",  val: currStats.acceleration, orig: origStats.acceleration, color: "#00ff9f" },
+    { label: "Frenado",     emoji: "🛑", val: currStats.braking,      orig: origStats.braking,      color: "#7c3aed" },
+    { label: "Manejo",      emoji: "🛞", val: currStats.handling,     orig: origStats.handling,     color: "#ec4899" },
+  ];
+
   return (
-    <div className="space-y-4">
-      {/* Header stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-dark-mid rounded-xl border border-white/5">
-        <StatBar label="Velocidad"    value={stats.speed}        color="bg-primary" />
-        <StatBar label="Aceleración"  value={stats.acceleration} color="bg-neon" />
-        <StatBar label="Frenado"      value={stats.braking}      color="bg-secondary" />
-        <StatBar label="Manejo"       value={stats.handling}     color="bg-pink" />
+    <div className={`space-y-4 transition-opacity duration-500 ${mounted ? "opacity-100" : "opacity-0"}`}>
+
+      {/* ── Gauges ──────────────────────────────────────────────────── */}
+      <div className={`p-4 rounded-2xl border bg-dark-mid transition-all duration-300 ${flash ? "border-primary/50 shadow-lg shadow-primary/10" : "border-white/6"}`}>
+        <p className="font-mono text-[9px] text-white/20 uppercase tracking-widest mb-4">
+          Estadísticas en tiempo real <span className="text-white/10 ml-2">│ barra blanca = original</span>
+        </p>
+        <div className="flex justify-around">
+          {GAUGES.map(g => (
+            <StatGauge key={g.label} label={g.label} value={g.val} color={g.color} emoji={g.emoji} delta={g.val - g.orig} />
+          ))}
+        </div>
       </div>
 
-      {/* Badges de validación */}
-      <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-        <span className="text-white/40">Base de datos: {catData?.count ?? 0} carros {catKey}</span>
-        {errors > 0 && (
-          <span className="flex items-center gap-1 text-red-400">
-            <AlertTriangle className="w-3 h-3" /> {errors} valor{errors > 1 ? "es" : ""} fuera de rango
-          </span>
-        )}
-        {warns > 0 && (
-          <span className="flex items-center gap-1 text-yellow-400">
-            <Info className="w-3 h-3" /> {warns} valor{warns > 1 ? "es" : ""} inusual
-          </span>
-        )}
-        {errors === 0 && warns === 0 && (
-          <span className="flex items-center gap-1 text-neon">
-            <CheckCircle2 className="w-3 h-3" /> Todos los valores en rango normal
-          </span>
-        )}
-        <button onClick={resetToAvg} className="ml-auto text-white/30 hover:text-white transition-colors">
-          ↺ Resetear a promedio
-        </button>
-      </div>
-
-      {/* Grupos de parámetros */}
-      {GROUPS.map((group) => {
-        const groupParams = PARAMS.filter((p) => p.group === group);
-        const isOpen = !!openGroups[group];
-        const groupErrors = groupParams.filter(p => validateValue(values[p.key] ?? 0, getFieldBounds(p.key, catKey)) !== "ok").length;
-
-        return (
-          <div key={group} className="border border-white/8 rounded-xl overflow-hidden">
-            <button
-              onClick={() => toggleGroup(group)}
-              className="w-full flex items-center justify-between px-4 py-3 bg-dark-mid hover:bg-dark-lighter transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <span className="font-orbitron font-bold text-sm uppercase tracking-wider text-white">{group}</span>
-                {groupErrors > 0 && (
-                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-yellow-500/10 text-yellow-400">
-                    {groupErrors}
-                  </span>
-                )}
-              </div>
-              {isOpen ? <ChevronUp className="w-4 h-4 text-white/40" /> : <ChevronDown className="w-4 h-4 text-white/40" />}
-            </button>
-
-            {isOpen && (
-              <div className="divide-y divide-white/5">
-                {groupParams.map((param) => {
-                  const raw = values[param.key] ?? 0;
-                  const bounds = getFieldBounds(param.key, catKey);
-                  const level = validateValue(raw, bounds);
-
-                  // Rango para el slider basado en datos reales
-                  const sliderMin = bounds ? Math.min(bounds.min * 0.8, raw * 0.5) : 0;
-                  const sliderMax = bounds ? Math.max(bounds.max * 1.2, raw * 1.5) : 10;
-                  const pct = sliderMax > sliderMin ? ((raw - sliderMin) / (sliderMax - sliderMin)) * 100 : 50;
-
-                  return (
-                    <div key={param.key} className="px-4 py-3 bg-dark-card hover:bg-dark-mid/50 transition-colors">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-rajdhani font-semibold text-white">{param.label}</span>
-                            {param.unit && <span className="text-[10px] font-mono text-white/30">{param.unit}</span>}
-                            {level === "danger" && <AlertTriangle className="w-3 h-3 text-red-400 flex-shrink-0" />}
-                            {level === "warn"   && <Info className="w-3 h-3 text-yellow-400 flex-shrink-0" />}
-                          </div>
-                          <p className="text-[11px] text-white/35 mt-0.5 leading-tight">{param.description}</p>
-                        </div>
-
-                        {/* Input numérico */}
-                        <input
-                          type="number"
-                          value={raw}
-                          step={param.step}
-                          onChange={(e) => {
-                            const v = parseFloat(e.target.value);
-                            if (!isNaN(v)) set(param.key, parseFloat(v.toFixed(param.decimals)));
-                          }}
-                          className={`w-20 text-right text-sm font-mono bg-dark border rounded-lg px-2 py-1 outline-none focus:border-primary/60 transition-colors flex-shrink-0 ${
-                            level === "danger" ? "border-red-500/40 text-red-400" :
-                            level === "warn"   ? "border-yellow-500/40 text-yellow-400" :
-                            "border-white/10 text-white"
-                          }`}
-                        />
-                      </div>
-
-                      {/* Slider */}
-                      <div className="relative">
-                        <input
-                          type="range"
-                          min={sliderMin}
-                          max={sliderMax}
-                          step={param.step}
-                          value={raw}
-                          onChange={(e) => set(param.key, parseFloat(parseFloat(e.target.value).toFixed(param.decimals)))}
-                          className="w-full h-1.5 appearance-none bg-dark rounded-full outline-none cursor-pointer"
-                          style={{
-                            background: `linear-gradient(to right, ${
-                              level === "danger" ? "#f87171" : level === "warn" ? "#facc15" : "#ff6600"
-                            } 0%, ${
-                              level === "danger" ? "#f87171" : level === "warn" ? "#facc15" : "#ff6600"
-                            } ${pct}%, #1a1a3a ${pct}%, #1a1a3a 100%)`
-                          }}
-                        />
-                        {/* Marcadores de rango real */}
-                        {bounds && (
-                          <div className="flex justify-between text-[9px] font-mono text-white/20 mt-1 px-0.5">
-                            <span>{bounds.min}</span>
-                            <span className="text-white/40">↕ p25-p75: {bounds.p25}–{bounds.p75}</span>
-                            <span>{bounds.max}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Tooltip de validación */}
-                      {level !== "ok" && bounds && (
-                        <p className={`text-[10px] font-mono mt-1 ${levelColor(level)}`}>
-                          {level === "danger"
-                            ? `⚠ Fuera del rango observado en ${catData?.count ?? 0} carros (${bounds.min}–${bounds.max})`
-                            : `ℹ Valor inusual — zona normal: ${bounds.p25}–${bounds.p75} (promedio: ${bounds.avg})`}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        );
-      })}
-
-      {/* Preview XML */}
+      {/* ── Presets ─────────────────────────────────────────────────── */}
       <div>
-        <button
-          onClick={() => setShowXml(!showXml)}
-          className="text-xs font-mono text-white/30 hover:text-white/60 transition-colors"
-        >
-          {showXml ? "▲ Ocultar" : "▼ Ver"} handling.meta generado
-        </button>
-        {showXml && (
-          <pre className="mt-2 p-3 bg-dark rounded-xl text-[10px] font-mono text-neon/70 overflow-x-auto border border-neon/10 max-h-48">
-            {`<handlingName>${handlingName}</handlingName>\n`}
-            {PARAMS.map(p => `<${p.key} value="${(values[p.key] ?? 0).toFixed(p.decimals)}" />`).join("\n")}
-          </pre>
+        <p className="font-mono text-[9px] text-white/20 uppercase tracking-widest mb-2">Perfil de manejo</p>
+        <div className="flex gap-1.5 flex-wrap">
+          {Object.entries(PRESETS).map(([id, p]) => (
+            <button key={id} onClick={() => applyPreset(id)}
+              className={`px-3 py-1.5 rounded-xl font-rajdhani font-bold text-xs uppercase tracking-wide border transition-all duration-200 ${
+                activePreset === id
+                  ? `border-opacity-40 bg-opacity-10 shadow-md ${p.glowClass}`
+                  : "border-white/8 text-white/35 hover:border-white/20 hover:text-white/60"
+              }`}
+              style={activePreset === id ? { borderColor: `${p.color}60`, backgroundColor: `${p.color}12`, color: p.color } : {}}>
+              {p.label}
+            </button>
+          ))}
+          {activePreset === "custom" && (
+            <span className="px-3 py-1.5 rounded-xl font-rajdhani font-bold text-xs uppercase tracking-wide border border-neon/30 bg-neon/5 text-neon">
+              ✏ Custom
+            </span>
+          )}
+        </div>
+        {activePreset !== "stock" && activePreset !== "custom" && PRESETS[activePreset] && (
+          <p className="text-[11px] text-white/25 font-rajdhani mt-1.5 pl-1">{PRESETS[activePreset].desc}</p>
         )}
       </div>
 
-      {/* Botón guardar */}
-      {onSave && (
-        <button
-          onClick={() => onSave(values)}
-          disabled={saving || errors > 0}
-          className="w-full btn-gta py-4 rounded-xl text-base disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {saving ? (
-            <><span className="animate-spin inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full" /> Procesando...</>
-          ) : errors > 0 ? (
-            <>⚠ Corrige los valores en rojo antes de comprar</>
+      {/* ── Validación ──────────────────────────────────────────────── */}
+      <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-[10px] font-mono px-1">
+        <span className="text-white/20">{catCount} carros {catKey} analizados</span>
+        {errors > 0 && <span className="text-red-400 flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{errors} error{errors > 1 ? "es" : ""}</span>}
+        {warns  > 0 && <span className="text-yellow-400">⚠ {warns} inusual{warns > 1 ? "es" : ""}</span>}
+        {!errors && !warns && <span className="text-neon flex items-center gap-1"><CheckCircle2 className="w-3 h-3" />Todo en rango seguro</span>}
+        {hasChanges && <span className="ml-auto text-primary/60">{changedParams.length} parámetro{changedParams.length > 1 ? "s" : ""} modificado{changedParams.length > 1 ? "s" : ""}</span>}
+      </div>
+
+      {/* ── Sliders ─────────────────────────────────────────────────── */}
+      <div className="space-y-2">
+        {PARAMS.map(param => {
+          const val  = values[param.key]  ?? originalHandling[param.key] ?? 0;
+          const orig = originalHandling[param.key] ?? val;
+          return (
+            <ParamSlider
+              key={param.key}
+              param={param}
+              value={val}
+              original={orig}
+              bounds={getBounds(param.key, catKey)}
+              catKey={catKey}
+              helpActive={activeHelp === param.key}
+              onHelp={() => setActiveHelp(activeHelp === param.key ? null : param.key)}
+              onChange={v => setVal(param.key, v)}
+              onReset={() => resetParam(param.key)}
+            />
+          );
+        })}
+      </div>
+
+      {/* ── Resumen de cambios ───────────────────────────────────────── */}
+      {hasChanges && (
+        <div className="p-4 rounded-xl border border-primary/15 bg-primary/3">
+          <p className="font-mono text-[9px] text-white/30 uppercase tracking-widest mb-2">Cambios aplicados</p>
+          <div className="space-y-1.5">
+            {changedParams.map(p => {
+              const orig  = originalHandling[p.key] ?? 0;
+              const curr  = values[p.key] ?? 0;
+              const delta = curr - orig;
+              return (
+                <div key={p.key} className="flex items-center gap-2 text-[11px] font-mono">
+                  <span className="text-base">{p.emoji}</span>
+                  <span className="text-white/40 flex-1">{p.label}</span>
+                  <span className="text-white/20">{orig.toFixed(p.decimals)}</span>
+                  <ChevronRight className="w-3 h-3 text-white/15" />
+                  <span className="text-primary font-bold">{curr.toFixed(p.decimals)}</span>
+                  <span className={`text-[9px] ${delta > 0 ? "text-neon" : "text-red-400"}`}>
+                    ({delta > 0 ? "+" : ""}{delta.toFixed(p.decimals)})
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── CTA ─────────────────────────────────────────────────────── */}
+      {onConfirm && (
+        <div className="space-y-2 pt-1">
+          {errors > 0 ? (
+            <div className="flex items-start gap-2 p-3 rounded-xl bg-red-500/5 border border-red-500/20 text-red-400 text-xs font-mono">
+              <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              Corrige los valores en rojo antes de continuar — podrían romper el handling en-game.
+            </div>
           ) : (
-            <>Comprar con este Handling — recibes el .meta personalizado</>
+            <button
+              onClick={() => onConfirm(values)}
+              disabled={saving}
+              className="w-full btn-gta py-4 rounded-2xl font-orbitron font-black text-sm uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2.5"
+            >
+              {saving ? (
+                <><span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" /> Generando archivo...</>
+              ) : hasChanges ? (
+                <><Flame className="w-4 h-4" /> Confirmar handling personalizado{editPrice > 0 ? ` (+${editPrice} CR)` : ""}</>
+              ) : (
+                <>Usar handling original (valores de fábrica)</>
+              )}
+            </button>
           )}
-        </button>
+          <p className="text-center text-[10px] font-mono text-white/15">
+            Recibirás <code className="text-neon/40">{handlingName}_handling.meta</code> listo para instalar · entrega por Discord DM
+          </p>
+        </div>
       )}
     </div>
   );
