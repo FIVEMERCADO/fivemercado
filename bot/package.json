@@ -1,14 +1,16 @@
 {
-  "name": "fivem-marketplace-bot",
-  "version": "1.0.0",
-  "description": "Discord bot for FiveM Marketplace redeem codes",
+  "name": "fivemercado-bot",
+  "version": "2.0.0",
+  "description": "Bot oficial de FiveMercado — descarga y gestión de scripts FiveM",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "deploy": "node deploy.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
-    "discord.js": "^14.16.0"
+    "discord.js": "^14.16.0",
+    "dotenv": "^16.4.0"
   }
 }

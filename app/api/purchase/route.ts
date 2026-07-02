@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { supabaseClient } from "@/lib/supabase";
+import { notifyPurchase } from "@/lib/discord-notify";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -85,6 +86,17 @@ export async function POST(req: NextRequest) {
     script_id: script_id,
     price_paid: script.is_free ? 0 : script.price,
   });
+
+  // DM automático via Discord bot — fire & forget (no bloquea la respuesta)
+  if (discordId) {
+    notifyPurchase({
+      discordId,
+      userId: user.id,
+      scriptId: script_id,
+      scriptTitle: script.title,
+      pricePaid: script.is_free ? 0 : script.price,
+    }).catch(() => {});
+  }
 
   return NextResponse.json({ success: true });
 }

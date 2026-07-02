@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Eye, Download, RefreshCw, X, Video } from "lucide-react";
+import { ChevronRight, Eye, Download, RefreshCw, X, Video, Bookmark, BookmarkCheck } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
@@ -11,6 +11,7 @@ import { StarRating } from "@/components/ui/StarRating";
 import { TabPanel } from "@/components/ui/TabPanel";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { PurchaseCard } from "@/components/ui/PurchaseCard";
+import { ReactionsBar } from "@/components/ui/ReactionsBar";
 import productsData from "@/data/products.json";
 import type { Product } from "@/types/product";
 
@@ -21,6 +22,24 @@ interface PageProps {
 export default function ProductDetailPage({ params }: PageProps) {
   const product = productsData.find((p) => p.id === params.id);
   const [updateBannerOpen, setUpdateBannerOpen] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  async function toggleSave() {
+    setSaveLoading(true);
+    setIsSaved((prev) => !prev); // optimistic
+    try {
+      const res = await fetch(`/api/scripts/${product?.id}/save`, { method: "POST" });
+      if (res.ok) {
+        const { saved } = await res.json();
+        setIsSaved(saved);
+      }
+    } catch {
+      setIsSaved((prev) => !prev); // revert
+    } finally {
+      setSaveLoading(false);
+    }
+  }
 
   if (!product) {
     return (
@@ -202,11 +221,11 @@ export default function ProductDetailPage({ params }: PageProps) {
         </div>
 
         {/* Title + stats */}
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
           <h1 className="font-rajdhani font-bold italic uppercase text-3xl md:text-5xl text-white leading-tight">
             {product.title}
           </h1>
-          <div className="flex gap-3 flex-shrink-0">
+          <div className="flex gap-3 flex-shrink-0 items-start">
             <div className="flex items-center gap-1.5 px-3 py-2 bg-dark-lighter/70 border border-white/5 rounded-xl">
               <Eye className="w-3.5 h-3.5 text-gray-500" />
               <span className="text-xs font-inter text-gray-400">
@@ -219,7 +238,25 @@ export default function ProductDetailPage({ params }: PageProps) {
                 <span className="font-bold text-white">{product.downloads.toLocaleString()}</span> descargas
               </span>
             </div>
+            {/* Guardar / Wishlist */}
+            <button
+              onClick={toggleSave}
+              disabled={saveLoading}
+              title={isSaved ? "Quitar de guardados" : "Guardar recurso"}
+              className={`flex items-center justify-center w-10 h-10 rounded-xl border transition-all ${
+                isSaved
+                  ? "bg-primary/10 border-primary/30 text-primary"
+                  : "bg-dark-lighter/70 border-white/5 text-gray-500 hover:border-white/20 hover:text-white"
+              } disabled:opacity-60`}
+            >
+              {isSaved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+            </button>
           </div>
+        </div>
+
+        {/* Reacciones */}
+        <div className="mb-8">
+          <ReactionsBar scriptId={product.id} />
         </div>
 
         {/* Main layout */}
@@ -251,12 +288,14 @@ export default function ProductDetailPage({ params }: PageProps) {
           <div className="lg:col-span-4">
             <PurchaseCard
               productId={product.id}
+              productTitle={product.title}
               price={product.price}
               isFree={product.isFree}
               releaseDate={product.releaseDate}
               lastUpdate={product.lastUpdate}
               author={product.author}
               authorAvatar={product.authorAvatar}
+              linkvertiseUrl={(product as Product & { linkvertiseUrl?: string }).linkvertiseUrl}
             />
           </div>
         </div>

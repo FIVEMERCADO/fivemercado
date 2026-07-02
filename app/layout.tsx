@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
-import { Rajdhani, Inter } from "next/font/google";
+import { Orbitron, Rajdhani, Share_Tech_Mono } from "next/font/google";
 import "./globals.css";
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-orbitron",
+  display: "swap",
+});
 
 const rajdhani = Rajdhani({
   subsets: ["latin"],
@@ -9,9 +16,10 @@ const rajdhani = Rajdhani({
   display: "swap",
 });
 
-const inter = Inter({
+const shareTechMono = Share_Tech_Mono({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -28,8 +36,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${rajdhani.variable} ${inter.variable}`}>
-      <body className="antialiased bg-dark text-white font-inter">
+    <html lang="es" className={`${orbitron.variable} ${rajdhani.variable} ${shareTechMono.variable}`}>
+      <body className="antialiased bg-dark text-white font-rajdhani">
         {children}
       </body>
     </html>

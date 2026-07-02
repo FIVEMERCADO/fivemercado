@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui/SectionTitle";
@@ -23,15 +23,50 @@ const MOCK_TRANSACTIONS = [
 
 export default function CreditsPage() {
   const [loading, setLoading] = useState<string | null>(null);
+  const [paypalStatus, setPaypalStatus] = useState<"success" | "error" | null>(null);
   const balance = 1250;
+
+  // Detectar retorno desde PayPal
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      setPaypalStatus("success");
+      window.history.replaceState({}, "", "/credits");
+    } else if (params.get("error")) {
+      setPaypalStatus("error");
+      window.history.replaceState({}, "", "/credits");
+    }
+  }, []);
 
   async function handleBuy(pkgId: string) {
     setLoading(pkgId);
-    // In production: redirect to PayPal
-    setTimeout(() => {
-      alert(`Redirecting to PayPal for package ${pkgId}...`);
+    try {
+      const res = await fetch("/api/paypal/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ package: parseInt(pkgId) }),
+      });
+
+      if (res.status === 401) {
+        window.location.href = "/?callbackUrl=/credits";
+        return;
+      }
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        console.error("PayPal create error:", body);
+        setPaypalStatus("error");
+        setLoading(null);
+        return;
+      }
+
+      const { approveUrl } = await res.json();
+      window.location.href = approveUrl;
+      // No reseteamos loading — la página va a redirigir
+    } catch {
+      setPaypalStatus("error");
       setLoading(null);
-    }, 1000);
+    }
   }
 
   return (
@@ -49,6 +84,30 @@ export default function CreditsPage() {
             Los créditos son la moneda usada para comprar scripts y recursos en el marketplace.
           </p>
         </div>
+
+        {/* Banners de estado PayPal */}
+        {paypalStatus === "success" && (
+          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 mb-8 flex items-center gap-3">
+            <svg className="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-emerald-300 font-inter text-sm">
+              ¡Pago completado! Los créditos han sido añadidos a tu cuenta.
+            </p>
+            <button onClick={() => setPaypalStatus(null)} className="ml-auto text-emerald-400/60 hover:text-emerald-400 text-lg leading-none">×</button>
+          </div>
+        )}
+        {paypalStatus === "error" && (
+          <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 mb-8 flex items-center gap-3">
+            <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-red-300 font-inter text-sm">
+              El pago fue cancelado o hubo un error. Inténtalo de nuevo.
+            </p>
+            <button onClick={() => setPaypalStatus(null)} className="ml-auto text-red-400/60 hover:text-red-400 text-lg leading-none">×</button>
+          </div>
+        )}
 
         {/* Current balance */}
         <div className="bg-dark-lighter/70 backdrop-blur-md border border-white/5 rounded-3xl p-8 text-center mb-12">
@@ -106,7 +165,10 @@ export default function CreditsPage() {
               </div>
 
               <div className="text-center">
-                <p className="text-sm text-gray-400 font-inter">Precio: <span className="text-white font-bold">€{pkg.price}.00</span></p>
+                <p className="text-sm text-gray-400 font-inter">
+                  Precio:{" "}
+                  <span className="text-white font-bold">€{pkg.price}.00</span>
+                </p>
               </div>
 
               {/* Features */}
@@ -118,10 +180,20 @@ export default function CreditsPage() {
 
               <button
                 onClick={() => handleBuy(pkg.id)}
-                disabled={loading === pkg.id}
+                disabled={loading !== null}
                 className="w-full py-3 bg-primary text-dark font-rajdhani font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-all shadow-lg shadow-primary/20 disabled:opacity-60 disabled:scale-100 text-sm flex items-center justify-center gap-2"
               >
-                {loading === pkg.id ? "Cargando..." : "💳 PAGAR CON PAYPAL"}
+                {loading === pkg.id ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    REDIRIGIENDO...
+                  </>
+                ) : (
+                  "💳 PAGAR CON PAYPAL"
+                )}
               </button>
             </div>
           ))}

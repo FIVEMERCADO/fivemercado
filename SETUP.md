@@ -50,6 +50,19 @@ node index.js
 
 El bot necesita correr 24/7. Opciones gratis: Railway, Fly.io, o un VPS.
 
+## 5b. PayPal REST API
+
+1. Ir a https://developer.paypal.com/dashboard/applications
+2. **Sandbox** → Create App → copiar Client ID y Secret
+3. Añadir en Vercel:
+   ```
+   PAYPAL_CLIENT_ID=...
+   PAYPAL_SECRET=...
+   PAYPAL_SANDBOX=true    # false en producción
+   ```
+4. Ejecutar en Supabase SQL Editor la sección "PayPal" de `supabase/schema.sql` (tabla `pending_orders` + función `add_credits`)
+5. Para producción: crear App separada en PayPal Live y cambiar `PAYPAL_SANDBOX=false`
+
 ## 6. Cloudflare (opcional pero recomendado)
 
 1. Agregar dominio en Cloudflare

@@ -8,6 +8,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { StarRating } from "@/components/ui/StarRating";
+import { HeroCarousel } from "@/components/ui/HeroCarousel";
 import productsData from "@/data/products.json";
 import type { Product } from "@/types/product";
 
@@ -29,47 +30,42 @@ export default function HomePage() {
     <div className="min-h-screen bg-dark">
       <Navbar />
 
-      {/* ── HERO ── */}
-      <section className="relative overflow-hidden pt-24 pb-20 px-4">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-3xl" />
+      {/* ── HERO CAROUSEL ── */}
+      <section className="pt-20 pb-6 px-4">
+        <div className="max-w-7xl mx-auto">
+          <HeroCarousel />
         </div>
+      </section>
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-dark-lighter/80 border border-white/10 rounded-full mb-8">
-            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-xs font-inter text-gray-300 tracking-widest uppercase">
-              +1,307 recursos disponibles
-            </span>
+      {/* ── HERO CTA ── */}
+      <section className="pb-12 px-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          {/* Tagline */}
+          <div>
+            <h1 className="font-orbitron font-black uppercase text-2xl sm:text-3xl text-white leading-tight">
+              LLEVA TU SERVIDOR{" "}
+              <span className="text-primary text-glow-orange">AL SIGUIENTE NIVEL</span>
+            </h1>
+            <p className="text-white/40 font-rajdhani text-base mt-1">
+              Scripts, assets y carros premium para FiveM · Comunidad hispana verificada
+            </p>
           </div>
 
-          <h1 className="font-rajdhani font-bold italic uppercase leading-none mb-6">
-            <span className="block text-5xl sm:text-7xl lg:text-8xl text-white">
-              LLEVA TU SERVIDOR
-            </span>
-            <span className="block text-5xl sm:text-7xl lg:text-8xl text-primary">
-              AL SIGUIENTE NIVEL
-            </span>
-          </h1>
-
-          <p className="text-gray-400 text-lg font-inter max-w-2xl mx-auto mb-10 leading-relaxed">
-            Descubre scripts, assets y recursos premium para FiveM creados por nuestra comunidad verificada de desarrolladores hispanos. Instala en minutos.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Botones */}
+          <div className="flex items-center gap-3 flex-shrink-0">
             <Link
               href="/marketplace"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-rajdhani font-bold uppercase tracking-wider text-lg rounded-2xl transition-all hover:brightness-110 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30"
+              className="btn-gta inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm"
             >
-              <ShoppingCart className="w-5 h-5" />
-              Ver Marketplace
+              <ShoppingCart className="w-4 h-4" />
+              Marketplace
             </Link>
             <Link
               href="/upload"
-              className="inline-flex items-center gap-2 px-8 py-4 border border-primary/50 text-primary font-rajdhani font-bold uppercase tracking-wider text-lg rounded-2xl transition-all hover:bg-primary/10 hover:border-primary hover:scale-105"
+              className="btn-gta-outline inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm"
             >
-              <Plus className="w-5 h-5" />
-              Vender Scripts
+              <Plus className="w-4 h-4" />
+              Vender
             </Link>
           </div>
         </div>

@@ -13,7 +13,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope: "identify email guilds",
+          scope: "identify email",
         },
       },
     }),
@@ -57,14 +57,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.sub;
       }
       if (token.discordId) {
-        (session.user as typeof session.user & { discordId: string }).discordId =
+        (session.user as typeof session.user & { discordId: string; guildMember: boolean }).discordId =
           token.discordId as string;
       }
+      (session.user as typeof session.user & { guildMember: boolean }).guildMember =
+        (token.guildMember as boolean) ?? false;
       return session;
     },
     async jwt({ token, account, profile }) {
       if (account?.provider === "discord" && profile) {
-        token.discordId = (profile as { id: string }).id;
+        const discordId = (profile as { id: string }).id;
+        token.discordId = discordId;
+
+        // Verifica membresía al hacer login
+        const { isGuildMember } = await import("@/lib/discord-guild");
+        token.guildMember = await isGuildMember(discordId);
       }
       return token;
     },

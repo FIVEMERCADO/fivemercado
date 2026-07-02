@@ -144,3 +144,163 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_update_rating
   AFTER INSERT OR UPDATE ON reviews
   FOR EACH ROW EXECUTE FUNCTION update_script_rating();
+
+-- =========================================
+-- PayPal — pending_orders + add_credits RPC
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS pending_orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  order_id TEXT UNIQUE NOT NULL,
+  credits INTEGER NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  expires_at TIMESTAMPTZ DEFAULT NOW() + INTERVAL '1 hour'
+);
+
+CREATE INDEX IF NOT EXISTS idx_pending_orders_order_id ON pending_orders(order_id);
+CREATE INDEX IF NOT EXISTS idx_pending_orders_user_id  ON pending_orders(user_id);
+
+-- Limpia órdenes expiradas (ejecutar via cron o manualmente)
+-- DELETE FROM pending_orders WHERE expires_at < NOW();
+
+-- =========================================
+-- Reacciones de scripts (👍 ❤️ 🔥 😢 😡)
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS script_reactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  script_id UUID NOT NULL REFERENCES scripts(id) ON DELETE CASCADE,
+  reaction TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, script_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_script_reactions_script ON script_reactions(script_id);
+
+-- =========================================
+-- Scripts guardados / Wishlist
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS saved_scripts (
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  script_id UUID NOT NULL REFERENCES scripts(id) ON DELETE CASCADE,
+  saved_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, script_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_saved_scripts_user ON saved_scripts(user_id);
+
+-- =========================================
+-- Download nonces — single-use, anti-replay
+-- =========================================
+
+-- Columna last_seen en users (heartbeat)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_seen TIMESTAMPTZ;
+CREATE INDEX IF NOT EXISTS idx_users_last_seen ON users(last_seen);
+
+CREATE TABLE IF NOT EXISTS download_nonces (
+  nonce TEXT PRIMARY KEY,
+  script_id UUID NOT NULL REFERENCES scripts(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at TIMESTAMPTZ NOT NULL DEFAULT NOW() + INTERVAL '5 minutes',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_download_nonces_expires ON download_nonces(expires_at);
+-- Limpieza periódica (cron o manualmente):
+-- DELETE FROM download_nonces WHERE expires_at < NOW();
+
+CREATE OR REPLACE FUNCTION add_credits(p_user_id UUID, p_credits INTEGER)
+RETURNS void AS $$
+BEGIN
+  UPDATE users SET credits = credits + p_credits WHERE id = p_user_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- =========================================
+-- CARS — Marketplace de carros con handling
+-- =========================================
+
+CREATE TABLE IF NOT EXISTS cars (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  brand TEXT NOT NULL,
+  category TEXT NOT NULL DEFAULT 'Sport',
+  -- 'Sport' | 'Muscle' | 'SUV' | 'Sedan' | 'Supercar' | 'Offroad' | 'Van' | 'Moto'
+  description TEXT DEFAULT '',
+  price INTEGER NOT NULL DEFAULT 0,
+  is_free BOOLEAN DEFAULT false,
+  is_published BOOLEAN DEFAULT false,
+  image_url TEXT,
+  -- Ruta en Cloudflare R2: ej. "cars/ferrari-488/base.zip"
+  r2_path TEXT,
+  -- Nombre del handling (handlingName en el .meta, ej. "FERRARI488")
+  handling_name TEXT NOT NULL,
+  -- Handling base en JSON — valores que el usuario puede editar
+  handling JSONB NOT NULL DEFAULT '{
+    "fMass": 1500,
+    "fInitialDragCoeff": 10.0,
+    "fMaxVelocity": 250.0,
+    "fBrakeForce": 0.7,
+    "fBrakeBiasFront": 0.38,
+    "fHandBrakeForce": 0.6,
+    "fSteeringLock": 40.0,
+    "fTractionCurveMax": 2.4,
+    "fTractionCurveMin": 1.8,
+    "fTractionBiasFront": 0.47,
+    "fDriveInertia": 1.0,
+    "nInitialDriveGears": 6,
+    "fInitialDriveForce": 0.32,
+    "fInitialDriveMaxFlatVel": 160.0,
+    "fSuspensionForce": 2.0,
+    "fSuspensionCompDamp": 1.5,
+    "fSuspensionReboundDamp": 2.0,
+    "fSuspensionUpperLimit": 0.10,
+    "fSuspensionLowerLimit": -0.10,
+    "fSuspensionRaise": 0.0,
+    "fSuspensionBiasFront": 0.5,
+    "fAntiRollBarForce": 0.4,
+    "fAntiRollBarBiasFront": 0.5,
+    "fCollisionDamageMult": 1.0,
+    "fWeaponDamageMult": 1.0,
+    "fDeformationDamageMult": 0.6,
+    "fEngineDamageMult": 1.5,
+    "fPetrolTankVolume": 65.0
+  }',
+  -- Stats visuales para la card (0-100)
+  stats JSONB NOT NULL DEFAULT '{"speed":50,"acceleration":50,"braking":50,"handling":50}',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_cars_category    ON cars(category);
+CREATE INDEX IF NOT EXISTS idx_cars_published   ON cars(is_published);
+CREATE INDEX IF NOT EXISTS idx_cars_price       ON cars(price);
+
+-- Compras de carros
+CREATE TABLE IF NOT EXISTS car_purchases (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  car_id UUID NOT NULL REFERENCES cars(id) ON DELETE CASCADE,
+  price_paid INTEGER NOT NULL DEFAULT 0,
+  -- Handling guardado por el usuario (null = usa el base)
+  custom_handling JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, car_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_car_purchases_user ON car_purchases(user_id);
+CREATE INDEX IF NOT EXISTS idx_car_purchases_car  ON car_purchases(car_id);
+
+-- Nonces para descargas de carros (mismo sistema que scripts)
+CREATE TABLE IF NOT EXISTS car_download_nonces (
+  nonce TEXT PRIMARY KEY,
+  car_id UUID NOT NULL REFERENCES cars(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  custom_handling JSONB,
+  expires_at TIMESTAMPTZ NOT NULL DEFAULT NOW() + INTERVAL '10 minutes',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);

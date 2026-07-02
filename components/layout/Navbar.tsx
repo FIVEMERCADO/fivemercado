@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Zap } from "lucide-react";
+
+const INVITE = process.env.NEXT_PUBLIC_DISCORD_INVITE ?? "https://discord.gg/rS5akJYFaa";
 
 const navLinks = [
   { label: "Marketplace", href: "/marketplace" },
-  { label: "Recursos Gratis", href: "/marketplace?filter=free" },
-  { label: "Scripts Premium", href: "/marketplace?filter=paid" },
+  { label: "Gratis",      href: "/marketplace?filter=free" },
+  { label: "Premium",     href: "/marketplace?filter=paid" },
+  { label: "Carros",      href: "/cars" },
 ];
 
 const DISCORD_SVG = (
@@ -18,42 +21,46 @@ const DISCORD_SVG = (
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [userOpen, setUserOpen] = useState(false);
+  const [userOpen, setUserOpen]     = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/5 bg-dark/80 backdrop-blur-xl">
+    <nav className="sticky top-0 z-50 border-b border-primary/10 bg-dark/85 backdrop-blur-xl">
+      {/* Línea neon superior */}
+      <div className="h-px bg-gradient-to-r from-transparent via-primary to-transparent opacity-60" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <span className="font-rajdhani font-bold italic uppercase text-2xl tracking-wider select-none">
-              <span className="text-white">FIVE</span>
-              <span className="text-primary">MERCADO</span>
+          <Link href="/" className="flex-shrink-0 group">
+            <span className="font-orbitron font-black uppercase text-xl tracking-widest select-none">
+              <span className="text-white group-hover:text-glow-orange transition-all">FIVE</span>
+              <span className="text-primary text-glow-orange">MERCADO</span>
             </span>
           </Link>
 
-          {/* Desktop nav links — visible lg+ */}
+          {/* Nav links desktop */}
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-inter text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className="px-4 py-2 text-sm font-rajdhani font-semibold text-white/50 hover:text-white uppercase tracking-wider transition-all rounded-lg hover:bg-primary/5 hover:text-primary"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Right side — visible lg+ */}
+          {/* Right side desktop */}
           <div className="hidden lg:flex items-center gap-3">
+
             {/* Discord */}
             <a
-              href="https://discord.gg"
+              href={INVITE}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600/20 border border-indigo-500/30 rounded-lg text-indigo-300 text-xs font-inter hover:bg-indigo-600/30 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 bg-[#5865F2]/10 border border-[#5865F2]/30 rounded-lg text-[#7289da] text-xs font-rajdhani font-bold uppercase tracking-wider hover:bg-[#5865F2]/20 hover:border-[#5865F2]/60 transition-all"
             >
               {DISCORD_SVG}
               Discord
@@ -62,45 +69,46 @@ export function Navbar() {
             {/* Credits */}
             <Link
               href="/credits"
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg hover:bg-yellow-500/20 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-lg hover:bg-primary/20 hover:border-primary/50 transition-all group"
             >
-              <span className="text-sm">🪙</span>
-              <span className="text-xs font-rajdhani font-bold text-yellow-400">0.00</span>
+              <Zap className="w-3.5 h-3.5 text-primary group-hover:text-glow-orange" />
+              <span className="text-xs font-mono font-bold text-primary tracking-wider">0 CR</span>
             </Link>
 
             {/* User dropdown */}
             <div className="relative">
               <button
                 onClick={() => setUserOpen(!userOpen)}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-xl border border-white/10 hover:border-primary/40 transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 hover:border-primary/40 hover:bg-primary/5 transition-all"
               >
-                <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">
+                <div className="w-7 h-7 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary text-xs font-orbitron font-bold">
                   U
                 </div>
-                <ChevronDown className={`w-3 h-3 text-gray-400 transition-transform ${userOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`w-3 h-3 text-white/40 transition-transform ${userOpen ? "rotate-180" : ""}`} />
               </button>
 
               {userOpen && (
                 <>
-                  {/* Backdrop */}
                   <div className="fixed inset-0 z-40" onClick={() => setUserOpen(false)} />
-                  <div className="absolute right-0 mt-2 w-52 bg-dark-lighter border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50">
+                  <div className="absolute right-0 mt-2 w-52 bg-dark-mid border border-primary/15 rounded-2xl shadow-2xl overflow-hidden z-50">
+                    {/* Línea top */}
+                    <div className="h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
                     <div className="px-4 py-3 border-b border-white/5">
-                      <p className="text-[10px] font-inter text-gray-500 uppercase tracking-wider">Conectado como</p>
-                      <p className="text-sm font-rajdhani font-bold text-white mt-0.5">User#1234</p>
+                      <p className="text-[10px] font-mono text-white/30 uppercase tracking-widest">Conectado</p>
+                      <p className="text-sm font-orbitron font-bold text-white mt-0.5">USER</p>
                     </div>
                     <div className="py-1">
                       {[
-                        { label: "Mi Perfil", href: "/profile" },
-                        { label: "Mis Compras", href: "/profile" },
-                        { label: "Vender Scripts", href: "/upload" },
+                        { label: "Mi Perfil",        href: "/profile" },
+                        { label: "Mis Compras",      href: "/profile" },
+                        { label: "Vender Scripts",   href: "/upload" },
                         { label: "Comprar Créditos", href: "/credits" },
                       ].map((item) => (
                         <Link
                           key={item.href + item.label}
                           href={item.href}
                           onClick={() => setUserOpen(false)}
-                          className="block px-4 py-2.5 text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors font-inter"
+                          className="block px-4 py-2.5 text-sm text-white/50 hover:text-white hover:bg-primary/5 transition-colors font-rajdhani font-semibold uppercase tracking-wide"
                         >
                           {item.label}
                         </Link>
@@ -108,7 +116,7 @@ export function Navbar() {
                       <div className="border-t border-white/5 mt-1 pt-1">
                         <button
                           onClick={() => setUserOpen(false)}
-                          className="w-full text-left px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors font-inter"
+                          className="w-full text-left px-4 py-2.5 text-sm text-red-400/70 hover:text-red-400 hover:bg-red-500/5 transition-colors font-rajdhani font-semibold uppercase tracking-wide"
                         >
                           Cerrar Sesión
                         </button>
@@ -120,67 +128,48 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Hamburger — visible below lg */}
+          {/* Hamburger mobile */}
           <button
-            className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5"
+            className="lg:hidden p-2 rounded-lg text-white/40 hover:text-white hover:bg-primary/10 border border-transparent hover:border-primary/20 transition-all"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menú"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile / tablet menu — visible below lg */}
+      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-white/5 bg-dark/95 backdrop-blur-xl">
+        <div className="lg:hidden border-t border-primary/10 bg-dark-mid/95 backdrop-blur-xl">
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-4 py-2.5 text-sm font-inter text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
+                className="block px-4 py-3 text-sm font-rajdhani font-bold text-white/50 hover:text-primary uppercase tracking-wider rounded-xl hover:bg-primary/5 transition-all"
               >
                 {link.label}
               </Link>
             ))}
-
-            <div className="pt-3 border-t border-white/5">
-              <div className="flex items-center gap-3 mb-3">
-                <Link
-                  href="/credits"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg"
-                >
-                  <span className="text-sm">🪙</span>
-                  <span className="text-xs font-rajdhani font-bold text-yellow-400">0.00</span>
-                </Link>
-                <Link
-                  href="/profile"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-1.5 border border-white/10 rounded-xl text-sm text-gray-300"
-                >
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">
-                    U
-                  </div>
-                  Mi Cuenta
-                </Link>
-              </div>
-
-              <a
-                href="https://discord.gg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600/20 border border-indigo-500/30 rounded-xl text-indigo-300 text-sm font-inter"
-              >
+            <div className="pt-3 border-t border-primary/10 space-y-2">
+              <Link href="/credits" onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-primary/10 border border-primary/20 rounded-xl">
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="text-sm font-mono font-bold text-primary">0 CRÉDITOS</span>
+              </Link>
+              <a href={INVITE} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#5865F2]/10 border border-[#5865F2]/30 rounded-xl text-[#7289da] text-sm font-rajdhani font-bold uppercase">
                 {DISCORD_SVG}
-                Unirse al Discord
+                Servidor Discord
               </a>
             </div>
           </div>
         </div>
       )}
+
+      {/* Línea neon inferior */}
+      <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
     </nav>
   );
 }

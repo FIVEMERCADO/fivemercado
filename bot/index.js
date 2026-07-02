@@ -1,157 +1,118 @@
-const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { createClient } = require("@supabase/supabase-js");
+const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder } = require("discord.js");
+const fs   = require("fs");
+const path = require("path");
 
-// ─── Config ──────────────────────────────────────────────────
-const TOKEN = process.env.DISCORD_BOT_TOKEN;
-const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+// Cargar .env.local del proyecto raíz
+require("dotenv").config({ path: path.join(__dirname, "../.env.local") });
 
-if (!TOKEN || !CLIENT_ID || !SUPABASE_URL || !SUPABASE_KEY) {
-  console.error("❌ Missing env vars. Check .env.local");
+// ─── Validación de env vars ───────────────────────────────────────────────────
+const REQUIRED = [
+  "DISCORD_BOT_TOKEN",
+  "DISCORD_CLIENT_ID",
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "SUPABASE_SERVICE_KEY",
+  "DOWNLOAD_SECRET",
+  "SITE_URL",
+];
+const missing = REQUIRED.filter((k) => !process.env[k]);
+if (missing.length) {
+  console.error("❌ Faltan variables de entorno:", missing.join(", "));
   process.exit(1);
 }
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+// ─── Cargar comandos ─────────────────────────────────────────────────────────
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+  ],
+});
+client.commands = new Collection();
 
-// ─── Register slash commands ──────────────────────────────────
-const commands = [
-  new SlashCommandBuilder()
-    .setName("redeem")
-    .setDescription("Redeem a one-time download code for a purchased FiveM script")
-    .addStringOption((opt) =>
-      opt.setName("code").setDescription("Your download code (e.g. 964139AFCF)").setRequired(true)
-    ),
-].map((c) => c.toJSON());
-
-const rest = new REST({ version: "10" }).setToken(TOKEN);
-
-(async () => {
-  try {
-    console.log("📡 Registering slash commands...");
-    await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
-    console.log("✅ Slash commands registered.");
-  } catch (err) {
-    console.error("❌ Failed to register commands:", err);
+const commandsPath = path.join(__dirname, "commands");
+for (const file of fs.readdirSync(commandsPath).filter((f) => f.endsWith(".js"))) {
+  const command = require(path.join(commandsPath, file));
+  if (!command.data || !command.execute) {
+    console.warn(`⚠️  Comando inválido: ${file}`);
+    continue;
   }
-})();
+  client.commands.set(command.data.name, command);
+  console.log(`  ✓ /${command.data.name}`);
+}
 
-// ─── Bot client ───────────────────────────────────────────────
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
+// ─── Eventos ─────────────────────────────────────────────────────────────────
 client.once("ready", () => {
-  console.log(`✅ Bot online as ${client.user.tag}`);
+  console.log(`\n✅ Bot online: ${client.user.tag}`);
+  client.user.setActivity("fivemercado.vercel.app", { type: ActivityType.Watching });
+});
+
+client.on("guildMemberAdd", async (member) => {
+  try {
+    const embed = new EmbedBuilder()
+      .setColor(0x2cade0)
+      .setTitle("👋 ¡Bienvenido a FiveMercado!")
+      .setDescription(
+        `Hola **${member.user.username}**, bienvenido al marketplace de scripts FiveM en español.\n\n` +
+        `Aquí puedes comprar, descargar y gestionar scripts premium para tu servidor FiveM.`
+      )
+      .addFields(
+        {
+          name: "🚀 Primeros pasos",
+          value: [
+            "1️⃣ Visita **fivemercado.vercel.app** e inicia sesión con Discord",
+            "2️⃣ Explora el marketplace y compra scripts",
+            "3️⃣ Usa `/descargar` en este servidor para obtener tus archivos",
+          ].join("\n"),
+        },
+        {
+          name: "🤖 Comandos útiles",
+          value: [
+            "`/descargar` — Descarga tus scripts comprados",
+            "`/saldo` — Ver tus créditos disponibles",
+            "`/miscompras` — Ver todos tus recursos",
+            "`/ayuda` — Ver todos los comandos",
+          ].join("\n"),
+        },
+        {
+          name: "🔗 Links",
+          value: [
+            "🌐 [Marketplace](https://fivemercado.vercel.app/marketplace)",
+            "💳 [Comprar créditos](https://fivemercado.vercel.app/credits)",
+            "❓ [Soporte](https://fivemercado.vercel.app/support)",
+          ].join("  •  "),
+        }
+      )
+      .setThumbnail("https://fivemercado.vercel.app/logo.png")
+      .setFooter({ text: "FiveMercado • El marketplace FiveM en español" })
+      .setTimestamp();
+
+    await member.send({ embeds: [embed] });
+  } catch {
+    // El usuario tiene los DMs desactivados — silencioso
+  }
+
+  // Asignar rol Miembro automáticamente
+  try {
+    const memberRole = member.guild.roles.cache.find((r) => r.name === "👤 Miembro");
+    if (memberRole) await member.roles.add(memberRole);
+  } catch {
+    // Sin permisos de manage roles — silencioso
+  }
 });
 
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  if (interaction.commandName !== "redeem") return;
-
-  const code = interaction.options.getString("code", true).trim().toUpperCase();
-  const discordId = interaction.user.id;
-
-  await interaction.deferReply({ ephemeral: true });
+  const command = client.commands.get(interaction.commandName);
+  if (!command) return;
 
   try {
-    // 1. Resolve user in DB by discord_id
-    const { data: user, error: userErr } = await supabase
-      .from("users")
-      .select("id, username")
-      .eq("discord_id", discordId)
-      .single();
-
-    if (userErr || !user) {
-      return interaction.editReply({
-        content: "❌ Your Discord account is not linked to any marketplace account. Please log in at the website first.",
-      });
-    }
-
-    // 2. Look up the code
-    const { data: redeemCode, error: codeErr } = await supabase
-      .from("redeem_codes")
-      .select("id, used, user_id, script_id")
-      .eq("code", code)
-      .single();
-
-    if (codeErr || !redeemCode) {
-      return interaction.editReply({ content: "❌ Invalid code. Please check and try again." });
-    }
-
-    if (redeemCode.used) {
-      return interaction.editReply({
-        content: "❌ This code has already been used. Generate a new code from your profile page.",
-      });
-    }
-
-    // 3. Verify ownership
-    if (redeemCode.user_id !== user.id) {
-      return interaction.editReply({ content: "❌ This code does not belong to your account." });
-    }
-
-    // 4. Get the script info
-    const { data: script } = await supabase
-      .from("scripts")
-      .select("id, title, files, external_links, file_option")
-      .eq("id", redeemCode.script_id)
-      .single();
-
-    if (!script) {
-      return interaction.editReply({ content: "❌ Script not found. Please contact support." });
-    }
-
-    // 5. Build download info
-    let downloadInfo = "";
-    if (script.file_option === "links" && script.external_links?.length > 0) {
-      downloadInfo = script.external_links
-        .map((link, i) => `[Download Link ${i + 1}](${link})`)
-        .join("\n");
-    } else if (script.files?.length > 0) {
-      const baseUrl = process.env.SITE_URL || "https://your-site.vercel.app";
-      downloadInfo = script.files
-        .map((f, i) => `[${f}](${baseUrl}/api/download/${script.id}/${encodeURIComponent(f)}?code=${code})`)
-        .join("\n");
-    } else {
-      downloadInfo = "Contact support — no files attached to this script.";
-    }
-
-    // 6. Mark code as used
-    await supabase
-      .from("redeem_codes")
-      .update({ used: true, used_at: new Date().toISOString() })
-      .eq("id", redeemCode.id);
-
-    // 7. Try to DM the user
-    try {
-      const dmChannel = await interaction.user.createDM();
-      const embed = new EmbedBuilder()
-        .setColor(0x2cade0)
-        .setTitle(`🎮 Download: ${script.title}`)
-        .setDescription(
-          `Your purchase has been verified! Here are your download links:\n\n${downloadInfo}`
-        )
-        .addFields(
-          { name: "Code Used", value: `\`${code}\``, inline: true },
-          { name: "Status", value: "✅ Redeemed", inline: true }
-        )
-        .setFooter({ text: "FiveMercado • Este enlace es solo para tu uso personal." })
-        .setTimestamp();
-
-      await dmChannel.send({ embeds: [embed] });
-    } catch {
-      return interaction.editReply({
-        content:
-          "⚠️ Could not send you a DM. Please enable DMs from server members and try again. Your code has NOT been consumed.",
-      });
-    }
-
-    // 8. Public reply
-    await interaction.editReply({
-      content: `✅ **Code redeemed!** Check your DMs for the download link to **${script.title}**.`,
-    });
+    await command.execute(interaction);
   } catch (err) {
-    console.error("Redeem error:", err);
-    await interaction.editReply({ content: "❌ An internal error occurred. Please try again later." });
+    console.error(`❌ /${interaction.commandName}:`, err);
+    const msg = { content: "❌ Error inesperado. Inténtalo más tarde.", ephemeral: true };
+    if (interaction.deferred || interaction.replied) await interaction.editReply(msg).catch(() => {});
+    else await interaction.reply(msg).catch(() => {});
   }
 });
 
-client.login(TOKEN);
+client.login(process.env.DISCORD_BOT_TOKEN);
