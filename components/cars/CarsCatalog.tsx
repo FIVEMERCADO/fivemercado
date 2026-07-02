@@ -249,9 +249,13 @@ function CarModal({ car, onClose }: { car: Car; onClose: () => void }) {
 
             {/* Descripción */}
             {car.description && (
-              <p className="font-rajdhani text-white/45 text-sm leading-relaxed border-l-2 pl-3" style={{ borderColor: `${cfg.color}50` }}>
-                {car.description}
-              </p>
+              <div className="rounded-xl p-3 relative overflow-hidden"
+                style={{ backgroundColor: `${cfg.color}08`, border: `1px solid ${cfg.color}20` }}>
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl" style={{ backgroundColor: cfg.color }} />
+                <p className="font-rajdhani text-white/85 text-sm leading-relaxed pl-2">
+                  {car.description}
+                </p>
+              </div>
             )}
 
             {/* Specs grid */}
