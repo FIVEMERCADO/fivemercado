@@ -549,11 +549,10 @@ export function CarsCatalog({ cars }: { cars: Car[] }) {
   useEffect(() => {
     import("animejs").then(({ animate, stagger }) => {
       animate(".car-card-enter", {
-        opacity: [0, 1],
-        translateY: [32, 0],
+        translateY: [28, 0],
         scale: [0.96, 1],
-        delay: stagger(70, { start: 100 }),
-        duration: 600,
+        delay: stagger(70, { start: 80 }),
+        duration: 550,
         ease: "easeOutExpo",
       });
     });
@@ -674,7 +673,6 @@ export function CarsCatalog({ cars }: { cars: Car[] }) {
       </div>
 
       <style jsx global>{`
-        .car-card-enter { opacity: 0; }
         @keyframes photo-fade { from { opacity:0; transform:scale(1.03); } to { opacity:1; transform:scale(1); } }
         .photo-fade { animation: photo-fade 0.35s ease-out; }
         @keyframes pulse-anim {
