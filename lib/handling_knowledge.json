@@ -1,0 +1,2066 @@
+{
+  "total_cars": 1253,
+  "categories": {
+    "Sport": {
+      "count": 1059,
+      "fields": {
+        "fMass": {
+          "min": 1205.0,
+          "max": 4000.0,
+          "avg": 1902.9629,
+          "p25": 1800.0,
+          "p50": 1800.0,
+          "p75": 2000.0
+        },
+        "fInitialDragCoeff": {
+          "min": 5.0,
+          "max": 10.0,
+          "avg": 7.9343,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 0.3,
+          "max": 2.0,
+          "avg": 0.9627,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.425,
+          "max": 0.65,
+          "avg": 0.538,
+          "p25": 0.45,
+          "p50": 0.525,
+          "p75": 0.6
+        },
+        "fHandBrakeForce": {
+          "min": 0.35,
+          "max": 4.45,
+          "avg": 0.9575,
+          "p25": 0.6,
+          "p50": 0.75,
+          "p75": 1.15
+        },
+        "fSteeringLock": {
+          "min": 35.0,
+          "max": 43.0,
+          "avg": 39.4124,
+          "p25": 40.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 1.32,
+          "max": 2.95,
+          "avg": 2.6156,
+          "p25": 2.6,
+          "p50": 2.7,
+          "p75": 2.8
+        },
+        "fTractionCurveMin": {
+          "min": 1.4,
+          "max": 2.6,
+          "avg": 2.1513,
+          "p25": 2.0,
+          "p50": 2.2,
+          "p75": 2.3
+        },
+        "fTractionBiasFront": {
+          "min": 0.45,
+          "max": 0.5,
+          "avg": 0.4838,
+          "p25": 0.48,
+          "p50": 0.485,
+          "p75": 0.49
+        },
+        "fDriveInertia": {
+          "min": 0.8,
+          "max": 1.0,
+          "avg": 0.998,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 1,
+          "max": 7,
+          "avg": 5.6105,
+          "p25": 5,
+          "p50": 6,
+          "p75": 6
+        },
+        "fInitialDriveForce": {
+          "min": 0.16,
+          "max": 0.56,
+          "avg": 0.3357,
+          "p25": 0.3,
+          "p50": 0.35,
+          "p75": 0.35
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 125.0,
+          "max": 240.0,
+          "avg": 201.5973,
+          "p25": 190.0,
+          "p50": 213.0,
+          "p75": 220.0
+        },
+        "fSuspensionForce": {
+          "min": 1.4,
+          "max": 3.8,
+          "avg": 2.484,
+          "p25": 2.1,
+          "p50": 2.6,
+          "p75": 2.8
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.8,
+          "max": 2.5,
+          "avg": 1.4151,
+          "p25": 1.2,
+          "p50": 1.4,
+          "p75": 1.5
+        },
+        "fSuspensionReboundDamp": {
+          "min": 1.0,
+          "max": 3.2,
+          "avg": 2.0537,
+          "p25": 1.65,
+          "p50": 2.2,
+          "p75": 2.2
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.04,
+          "max": 0.2,
+          "avg": 0.0931,
+          "p25": 0.07,
+          "p50": 0.09,
+          "p75": 0.1
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.2,
+          "max": -0.05,
+          "avg": -0.1237,
+          "p25": -0.14,
+          "p50": -0.12,
+          "p75": -0.1
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.4,
+          "max": 0.56,
+          "avg": 0.4963,
+          "p25": 0.48,
+          "p50": 0.5,
+          "p75": 0.52
+        },
+        "fAntiRollBarForce": {
+          "min": 0.0,
+          "max": 1.3,
+          "avg": 0.7398,
+          "p25": 0.6,
+          "p50": 0.8,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.0,
+          "max": 0.68,
+          "avg": 0.5278,
+          "p25": 0.5,
+          "p50": 0.55,
+          "p75": 0.6
+        },
+        "fCollisionDamageMult": {
+          "min": 0.7,
+          "max": 1.0,
+          "avg": 0.7442,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.3,
+          "max": 0.8,
+          "avg": 0.7052,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 1.4,
+          "max": 1.5,
+          "avg": 1.4999,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.6,
+          "avg": 0.2716,
+          "p25": 0.0,
+          "p50": 0.3,
+          "p75": 0.5
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.0,
+          "max": 1.1,
+          "avg": 0.8534,
+          "p25": 0.8,
+          "p50": 0.9,
+          "p75": 1.0
+        },
+        "fTractionLossMult": {
+          "min": 0.0,
+          "max": 1.0,
+          "avg": 0.7901,
+          "p25": 0.6,
+          "p50": 1.0,
+          "p75": 1.0
+        }
+      }
+    },
+    "Moto": {
+      "count": 34,
+      "fields": {
+        "fMass": {
+          "min": 500.0,
+          "max": 2200.0,
+          "avg": 1657.1875,
+          "p25": 690.0,
+          "p50": 2200.0,
+          "p75": 2200.0
+        },
+        "fInitialDragCoeff": {
+          "min": 5.2,
+          "max": 8.0,
+          "avg": 7.825,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 1.0,
+          "max": 3.2,
+          "avg": 1.0844,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.25,
+          "max": 0.67,
+          "avg": 0.55,
+          "p25": 0.5,
+          "p50": 0.6,
+          "p75": 0.65
+        },
+        "fHandBrakeForce": {
+          "min": 0.2,
+          "max": 1.65,
+          "avg": 1.0766,
+          "p25": 0.8,
+          "p50": 0.9,
+          "p75": 1.6
+        },
+        "fSteeringLock": {
+          "min": 35.0,
+          "max": 40.0,
+          "avg": 38.7188,
+          "p25": 36.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 2.6,
+          "max": 3.7,
+          "avg": 2.8937,
+          "p25": 2.8,
+          "p50": 2.9,
+          "p75": 2.9
+        },
+        "fTractionCurveMin": {
+          "min": 2.0,
+          "max": 3.49,
+          "avg": 2.3994,
+          "p25": 2.3,
+          "p50": 2.4,
+          "p75": 2.4
+        },
+        "fTractionBiasFront": {
+          "min": 0.35,
+          "max": 0.5,
+          "avg": 0.4638,
+          "p25": 0.45,
+          "p50": 0.475,
+          "p75": 0.5
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 6,
+          "max": 7,
+          "avg": 6.2812,
+          "p25": 6,
+          "p50": 6,
+          "p75": 7
+        },
+        "fInitialDriveForce": {
+          "min": 0.24,
+          "max": 0.6,
+          "avg": 0.3668,
+          "p25": 0.34,
+          "p50": 0.35,
+          "p75": 0.35
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 170.0,
+          "max": 255.0,
+          "avg": 208.4375,
+          "p25": 200.0,
+          "p50": 200.0,
+          "p75": 220.0
+        },
+        "fSuspensionForce": {
+          "min": 1.4,
+          "max": 9.5,
+          "avg": 4.3266,
+          "p25": 2.2,
+          "p50": 2.65,
+          "p75": 7.5
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.8,
+          "max": 5.5,
+          "avg": 2.4537,
+          "p25": 1.5,
+          "p50": 2.1,
+          "p75": 2.56
+        },
+        "fSuspensionReboundDamp": {
+          "min": 1.3,
+          "max": 10.8,
+          "avg": 3.9644,
+          "p25": 1.4,
+          "p50": 2.4,
+          "p75": 5.0
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.05,
+          "max": 0.2,
+          "avg": 0.13,
+          "p25": 0.1,
+          "p50": 0.12,
+          "p75": 0.15
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.18,
+          "max": -0.075,
+          "avg": -0.1359,
+          "p25": -0.15,
+          "p50": -0.14,
+          "p75": -0.12
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.47,
+          "max": 0.53,
+          "avg": 0.4953,
+          "p25": 0.48,
+          "p50": 0.5,
+          "p75": 0.5
+        },
+        "fAntiRollBarForce": {
+          "min": 0.0,
+          "max": 1.0,
+          "avg": 0.4656,
+          "p25": 0.0,
+          "p50": 0.5,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.0,
+          "max": 0.61,
+          "avg": 0.2687,
+          "p25": 0.0,
+          "p50": 0.25,
+          "p75": 0.6
+        },
+        "fCollisionDamageMult": {
+          "min": 0.5,
+          "max": 0.7,
+          "avg": 0.6854,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.7,
+          "max": 0.8,
+          "avg": 0.7062,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 1.5,
+          "max": 1.5,
+          "avg": 1.5,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.6,
+          "avg": 0.275,
+          "p25": 0.0,
+          "p50": 0.35,
+          "p75": 0.5
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.0,
+          "max": 1.1,
+          "avg": 0.8969,
+          "p25": 0.9,
+          "p50": 0.9,
+          "p75": 1.0
+        },
+        "fTractionLossMult": {
+          "min": 0.2,
+          "max": 1.0,
+          "avg": 0.7813,
+          "p25": 0.8,
+          "p50": 0.8,
+          "p75": 1.0
+        }
+      }
+    },
+    "Offroad": {
+      "count": 25,
+      "fields": {
+        "fMass": {
+          "min": 1800.0,
+          "max": 2725.0,
+          "avg": 2071.7391,
+          "p25": 2000.0,
+          "p50": 2000.0,
+          "p75": 2200.0
+        },
+        "fInitialDragCoeff": {
+          "min": 3.5,
+          "max": 8.0,
+          "avg": 7.8043,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 0.7,
+          "max": 1.0,
+          "avg": 0.9478,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.425,
+          "max": 0.65,
+          "avg": 0.5124,
+          "p25": 0.45,
+          "p50": 0.5,
+          "p75": 0.55
+        },
+        "fHandBrakeForce": {
+          "min": 0.32,
+          "max": 5.0,
+          "avg": 1.4465,
+          "p25": 0.45,
+          "p50": 1.0,
+          "p75": 1.4
+        },
+        "fSteeringLock": {
+          "min": 40.0,
+          "max": 45.0,
+          "avg": 40.2174,
+          "p25": 40.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 2.6,
+          "max": 6.3,
+          "avg": 3.1783,
+          "p25": 2.6,
+          "p50": 2.7,
+          "p75": 2.9
+        },
+        "fTractionCurveMin": {
+          "min": 2.0,
+          "max": 6.0,
+          "avg": 2.6783,
+          "p25": 2.0,
+          "p50": 2.2,
+          "p75": 2.4
+        },
+        "fTractionBiasFront": {
+          "min": 0.39,
+          "max": 0.51,
+          "avg": 0.485,
+          "p25": 0.485,
+          "p50": 0.488,
+          "p75": 0.5
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.2,
+          "avg": 1.0261,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 6,
+          "max": 8,
+          "avg": 6.2609,
+          "p25": 6,
+          "p50": 6,
+          "p75": 6
+        },
+        "fInitialDriveForce": {
+          "min": 0.25,
+          "max": 0.53,
+          "avg": 0.3461,
+          "p25": 0.27,
+          "p50": 0.33,
+          "p75": 0.4
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 190.0,
+          "max": 350.0,
+          "avg": 223.913,
+          "p25": 190.0,
+          "p50": 200.0,
+          "p75": 240.0
+        },
+        "fSuspensionForce": {
+          "min": 1.3,
+          "max": 2.95,
+          "avg": 2.1717,
+          "p25": 1.4,
+          "p50": 2.4,
+          "p75": 2.65
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.9,
+          "max": 2.7,
+          "avg": 1.4652,
+          "p25": 1.0,
+          "p50": 1.4,
+          "p75": 1.7
+        },
+        "fSuspensionReboundDamp": {
+          "min": 1.0,
+          "max": 3.2,
+          "avg": 2.1304,
+          "p25": 1.4,
+          "p50": 2.2,
+          "p75": 2.5
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.045,
+          "max": 0.24,
+          "avg": 0.1128,
+          "p25": 0.08,
+          "p50": 0.1,
+          "p75": 0.18
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.28,
+          "max": -0.06,
+          "avg": -0.1513,
+          "p25": -0.18,
+          "p50": -0.17,
+          "p75": -0.1
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.4,
+          "max": 0.52,
+          "avg": 0.5013,
+          "p25": 0.49,
+          "p50": 0.51,
+          "p75": 0.52
+        },
+        "fAntiRollBarForce": {
+          "min": 0.2,
+          "max": 0.9,
+          "avg": 0.6348,
+          "p25": 0.3,
+          "p50": 0.8,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.25,
+          "max": 0.62,
+          "avg": 0.5291,
+          "p25": 0.5,
+          "p50": 0.55,
+          "p75": 0.6
+        },
+        "fCollisionDamageMult": {
+          "min": 0.4,
+          "max": 5.3,
+          "avg": 0.9083,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 0.4,
+          "max": 3.9,
+          "avg": 1.0478,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.0,
+          "max": 5.3,
+          "avg": 0.813,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 0.4,
+          "max": 4.9,
+          "avg": 1.5496,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.5,
+          "avg": 0.3674,
+          "p25": 0.35,
+          "p50": 0.4,
+          "p75": 0.4
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.0,
+          "max": 1.0,
+          "avg": 0.8283,
+          "p25": 0.85,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fTractionLossMult": {
+          "min": 0.1,
+          "max": 1.0,
+          "avg": 0.6913,
+          "p25": 0.4,
+          "p50": 0.8,
+          "p75": 1.0
+        }
+      }
+    },
+    "SUV": {
+      "count": 38,
+      "fields": {
+        "fMass": {
+          "min": 590.0,
+          "max": 2400.0,
+          "avg": 1988.6111,
+          "p25": 2000.0,
+          "p50": 2000.0,
+          "p75": 2000.0
+        },
+        "fInitialDragCoeff": {
+          "min": 7.0142,
+          "max": 8.5,
+          "avg": 7.9421,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 0.8,
+          "max": 3.2,
+          "avg": 1.0611,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.425,
+          "max": 0.67,
+          "avg": 0.5768,
+          "p25": 0.525,
+          "p50": 0.6,
+          "p75": 0.65
+        },
+        "fHandBrakeForce": {
+          "min": 0.32,
+          "max": 8.0,
+          "avg": 1.265,
+          "p25": 0.62,
+          "p50": 1.0,
+          "p75": 1.62
+        },
+        "fSteeringLock": {
+          "min": 35.0,
+          "max": 40.0,
+          "avg": 39.75,
+          "p25": 40.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 2.15,
+          "max": 2.9,
+          "avg": 2.675,
+          "p25": 2.6,
+          "p50": 2.6,
+          "p75": 2.9
+        },
+        "fTractionCurveMin": {
+          "min": 1.85,
+          "max": 2.59,
+          "avg": 2.1244,
+          "p25": 2.0,
+          "p50": 2.0,
+          "p75": 2.3
+        },
+        "fTractionBiasFront": {
+          "min": 0.45,
+          "max": 0.5,
+          "avg": 0.4856,
+          "p25": 0.48,
+          "p50": 0.485,
+          "p75": 0.49
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 5,
+          "max": 9,
+          "avg": 5.9167,
+          "p25": 6,
+          "p50": 6,
+          "p75": 6
+        },
+        "fInitialDriveForce": {
+          "min": 0.2,
+          "max": 0.76,
+          "avg": 0.3428,
+          "p25": 0.3,
+          "p50": 0.3,
+          "p75": 0.4
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 135.0,
+          "max": 240.0,
+          "avg": 194.8611,
+          "p25": 190.0,
+          "p50": 190.0,
+          "p75": 200.0
+        },
+        "fSuspensionForce": {
+          "min": 1.29,
+          "max": 7.5,
+          "avg": 2.5685,
+          "p25": 2.0,
+          "p50": 2.7,
+          "p75": 3.0
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.6,
+          "max": 5.5,
+          "avg": 1.6331,
+          "p25": 1.0,
+          "p50": 1.2,
+          "p75": 2.1
+        },
+        "fSuspensionReboundDamp": {
+          "min": 0.55,
+          "max": 10.8,
+          "avg": 2.3514,
+          "p25": 1.4,
+          "p50": 2.2,
+          "p75": 3.0
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.05,
+          "max": 0.3,
+          "avg": 0.1334,
+          "p25": 0.1,
+          "p50": 0.1,
+          "p75": 0.15
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.18,
+          "max": -0.1,
+          "avg": -0.1438,
+          "p25": -0.18,
+          "p50": -0.14,
+          "p75": -0.118
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.443,
+          "max": 0.7,
+          "avg": 0.5159,
+          "p25": 0.5,
+          "p50": 0.5,
+          "p75": 0.52
+        },
+        "fAntiRollBarForce": {
+          "min": 0.0,
+          "max": 1.8,
+          "avg": 0.6944,
+          "p25": 0.4,
+          "p50": 0.9,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.0,
+          "max": 0.7,
+          "avg": 0.5228,
+          "p25": 0.53,
+          "p50": 0.55,
+          "p75": 0.6
+        },
+        "fCollisionDamageMult": {
+          "min": 0.5,
+          "max": 1.0,
+          "avg": 0.7111,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.7,
+          "max": 0.8,
+          "avg": 0.7111,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 1.5,
+          "max": 1.5,
+          "avg": 1.5,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.6,
+          "avg": 0.35,
+          "p25": 0.3,
+          "p50": 0.4,
+          "p75": 0.5
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.0,
+          "max": 1.5,
+          "avg": 0.9361,
+          "p25": 0.9,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fTractionLossMult": {
+          "min": 0.0,
+          "max": 1.0,
+          "avg": 0.5528,
+          "p25": 0.4,
+          "p50": 0.6,
+          "p75": 0.8
+        }
+      }
+    },
+    "Van": {
+      "count": 17,
+      "fields": {
+        "fMass": {
+          "min": 1800.0,
+          "max": 4000.0,
+          "avg": 2066.6667,
+          "p25": 1800.0,
+          "p50": 2000.0,
+          "p75": 2000.0
+        },
+        "fInitialDragCoeff": {
+          "min": 8.0,
+          "max": 8.0,
+          "avg": 8.0,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.45,
+          "max": 0.65,
+          "avg": 0.5406,
+          "p25": 0.485,
+          "p50": 0.556,
+          "p75": 0.6
+        },
+        "fHandBrakeForce": {
+          "min": 0.32,
+          "max": 1.1,
+          "avg": 0.6133,
+          "p25": 0.4,
+          "p50": 0.6,
+          "p75": 0.8
+        },
+        "fSteeringLock": {
+          "min": 40.0,
+          "max": 40.0,
+          "avg": 40.0,
+          "p25": 40.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 2.6,
+          "max": 2.9,
+          "avg": 2.7667,
+          "p25": 2.6,
+          "p50": 2.7,
+          "p75": 2.9
+        },
+        "fTractionCurveMin": {
+          "min": 2.0,
+          "max": 2.4,
+          "avg": 2.2267,
+          "p25": 2.0,
+          "p50": 2.3,
+          "p75": 2.3
+        },
+        "fTractionBiasFront": {
+          "min": 0.4725,
+          "max": 0.51,
+          "avg": 0.4847,
+          "p25": 0.48,
+          "p50": 0.4846,
+          "p75": 0.49
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 4,
+          "max": 7,
+          "avg": 5.5333,
+          "p25": 4,
+          "p50": 6,
+          "p75": 6
+        },
+        "fInitialDriveForce": {
+          "min": 0.27,
+          "max": 0.4,
+          "avg": 0.3387,
+          "p25": 0.27,
+          "p50": 0.35,
+          "p75": 0.4
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 170.0,
+          "max": 240.0,
+          "avg": 208.0,
+          "p25": 190.0,
+          "p50": 200.0,
+          "p75": 230.0
+        },
+        "fSuspensionForce": {
+          "min": 1.4,
+          "max": 3.6,
+          "avg": 2.0792,
+          "p25": 1.46,
+          "p50": 1.5,
+          "p75": 2.8737
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.9,
+          "max": 2.5,
+          "avg": 1.6667,
+          "p25": 1.0,
+          "p50": 1.56,
+          "p75": 2.2
+        },
+        "fSuspensionReboundDamp": {
+          "min": 0.38,
+          "max": 2.8,
+          "avg": 1.806,
+          "p25": 1.4,
+          "p50": 2.0,
+          "p75": 2.425
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.05,
+          "max": 0.24,
+          "avg": 0.108,
+          "p25": 0.08,
+          "p50": 0.1,
+          "p75": 0.13
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.28,
+          "max": -0.08,
+          "avg": -0.1564,
+          "p25": -0.18,
+          "p50": -0.161,
+          "p75": -0.141
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.467,
+          "max": 0.52,
+          "avg": 0.5013,
+          "p25": 0.493,
+          "p50": 0.5,
+          "p75": 0.52
+        },
+        "fAntiRollBarForce": {
+          "min": 0.0,
+          "max": 0.9,
+          "avg": 0.4667,
+          "p25": 0.0,
+          "p50": 0.6,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.4,
+          "max": 0.66,
+          "avg": 0.5333,
+          "p25": 0.5,
+          "p50": 0.54,
+          "p75": 0.56
+        },
+        "fCollisionDamageMult": {
+          "min": 0.7,
+          "max": 0.7,
+          "avg": 0.7,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.7,
+          "max": 0.7,
+          "avg": 0.7,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 1.5,
+          "max": 1.5,
+          "avg": 1.5,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.5,
+          "avg": 0.24,
+          "p25": 0.0,
+          "p50": 0.3,
+          "p75": 0.5
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.8,
+          "max": 1.0,
+          "avg": 0.88,
+          "p25": 0.8,
+          "p50": 0.9,
+          "p75": 0.9
+        },
+        "fTractionLossMult": {
+          "min": 0.5,
+          "max": 1.1,
+          "avg": 0.8067,
+          "p25": 0.7,
+          "p50": 0.8,
+          "p75": 0.9
+        }
+      }
+    },
+    "Truck": {
+      "count": 5,
+      "fields": {
+        "fMass": {
+          "min": 5000.0,
+          "max": 5500.0,
+          "avg": 5166.6667,
+          "p25": 5000.0,
+          "p50": 5000.0,
+          "p75": 5500.0
+        },
+        "fInitialDragCoeff": {
+          "min": 6.0,
+          "max": 6.0,
+          "avg": 6.0,
+          "p25": 6.0,
+          "p50": 6.0,
+          "p75": 6.0
+        },
+        "fBrakeForce": {
+          "min": 0.25,
+          "max": 0.25,
+          "avg": 0.25,
+          "p25": 0.25,
+          "p50": 0.25,
+          "p75": 0.25
+        },
+        "fBrakeBiasFront": {
+          "min": 0.6,
+          "max": 0.6,
+          "avg": 0.6,
+          "p25": 0.6,
+          "p50": 0.6,
+          "p75": 0.6
+        },
+        "fHandBrakeForce": {
+          "min": 0.15,
+          "max": 0.4,
+          "avg": 0.3167,
+          "p25": 0.15,
+          "p50": 0.4,
+          "p75": 0.4
+        },
+        "fSteeringLock": {
+          "min": 37.0,
+          "max": 40.0,
+          "avg": 38.0,
+          "p25": 37.0,
+          "p50": 37.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 1.6,
+          "max": 1.6,
+          "avg": 1.6,
+          "p25": 1.6,
+          "p50": 1.6,
+          "p75": 1.6
+        },
+        "fTractionCurveMin": {
+          "min": 1.4,
+          "max": 1.45,
+          "avg": 1.4167,
+          "p25": 1.4,
+          "p50": 1.4,
+          "p75": 1.45
+        },
+        "fTractionBiasFront": {
+          "min": 0.46,
+          "max": 0.48,
+          "avg": 0.4733,
+          "p25": 0.46,
+          "p50": 0.48,
+          "p75": 0.48
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 4,
+          "max": 4,
+          "avg": 4.0,
+          "p25": 4,
+          "p50": 4,
+          "p75": 4
+        },
+        "fInitialDriveForce": {
+          "min": 0.11,
+          "max": 0.15,
+          "avg": 0.1367,
+          "p25": 0.11,
+          "p50": 0.15,
+          "p75": 0.15
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 100.0,
+          "max": 105.0,
+          "avg": 101.6667,
+          "p25": 100.0,
+          "p50": 100.0,
+          "p75": 105.0
+        },
+        "fSuspensionForce": {
+          "min": 1.4,
+          "max": 1.9,
+          "avg": 1.6333,
+          "p25": 1.4,
+          "p50": 1.6,
+          "p75": 1.9
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.7,
+          "max": 1.1,
+          "avg": 0.9333,
+          "p25": 0.7,
+          "p50": 1.0,
+          "p75": 1.1
+        },
+        "fSuspensionReboundDamp": {
+          "min": 1.0,
+          "max": 1.9,
+          "avg": 1.5,
+          "p25": 1.0,
+          "p50": 1.6,
+          "p75": 1.9
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.15,
+          "max": 0.15,
+          "avg": 0.15,
+          "p25": 0.15,
+          "p50": 0.15,
+          "p75": 0.15
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.2,
+          "max": -0.2,
+          "avg": -0.2,
+          "p25": -0.2,
+          "p50": -0.2,
+          "p75": -0.2
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.4,
+          "max": 0.47,
+          "avg": 0.4467,
+          "p25": 0.4,
+          "p50": 0.47,
+          "p75": 0.47
+        },
+        "fAntiRollBarForce": {
+          "min": 0.0,
+          "max": 0.2,
+          "avg": 0.0667,
+          "p25": 0.0,
+          "p50": 0.0,
+          "p75": 0.2
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.0,
+          "max": 0.5,
+          "avg": 0.1667,
+          "p25": 0.0,
+          "p50": 0.0,
+          "p75": 0.5
+        },
+        "fCollisionDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.8,
+          "max": 0.8,
+          "avg": 0.8,
+          "p25": 0.8,
+          "p50": 0.8,
+          "p75": 0.8
+        },
+        "fEngineDamageMult": {
+          "min": 1.5,
+          "max": 1.5,
+          "avg": 1.5,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.0,
+          "avg": 0.0,
+          "p25": 0.0,
+          "p50": 0.0,
+          "p75": 0.0
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.0,
+          "max": 0.5,
+          "avg": 0.3333,
+          "p25": 0.0,
+          "p50": 0.5,
+          "p75": 0.5
+        },
+        "fTractionLossMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        }
+      }
+    },
+    "Supercar": {
+      "count": 48,
+      "fields": {
+        "fMass": {
+          "min": 1500.0,
+          "max": 1800.0,
+          "avg": 1782.9545,
+          "p25": 1800.0,
+          "p50": 1800.0,
+          "p75": 1800.0
+        },
+        "fInitialDragCoeff": {
+          "min": 8.0,
+          "max": 10.0,
+          "avg": 8.1023,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 1.0,
+          "max": 1.1,
+          "avg": 1.0034,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.425,
+          "max": 0.8,
+          "avg": 0.5072,
+          "p25": 0.45,
+          "p50": 0.485,
+          "p75": 0.525
+        },
+        "fHandBrakeForce": {
+          "min": 0.5,
+          "max": 3.6,
+          "avg": 1.0814,
+          "p25": 0.53,
+          "p50": 0.7,
+          "p75": 1.3
+        },
+        "fSteeringLock": {
+          "min": 40.0,
+          "max": 40.0,
+          "avg": 40.0,
+          "p25": 40.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 2.66,
+          "max": 3.5,
+          "avg": 2.8627,
+          "p25": 2.9,
+          "p50": 2.9,
+          "p75": 2.9
+        },
+        "fTractionCurveMin": {
+          "min": 2.2,
+          "max": 3.53,
+          "avg": 2.3266,
+          "p25": 2.3,
+          "p50": 2.3,
+          "p75": 2.3
+        },
+        "fTractionBiasFront": {
+          "min": 0.47,
+          "max": 0.49,
+          "avg": 0.4817,
+          "p25": 0.48,
+          "p50": 0.485,
+          "p75": 0.485
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 5,
+          "max": 7,
+          "avg": 6.0455,
+          "p25": 6,
+          "p50": 6,
+          "p75": 6
+        },
+        "fInitialDriveForce": {
+          "min": 0.35,
+          "max": 0.4,
+          "avg": 0.3868,
+          "p25": 0.36,
+          "p50": 0.4,
+          "p75": 0.4
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 180.1,
+          "max": 300.0,
+          "avg": 234.0932,
+          "p25": 230.0,
+          "p50": 240.0,
+          "p75": 240.0
+        },
+        "fSuspensionForce": {
+          "min": 1.9,
+          "max": 3.65,
+          "avg": 2.787,
+          "p25": 2.6,
+          "p50": 2.65,
+          "p75": 3.0
+        },
+        "fSuspensionCompDamp": {
+          "min": 1.0,
+          "max": 2.5,
+          "avg": 1.5386,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fSuspensionReboundDamp": {
+          "min": 1.8,
+          "max": 3.5,
+          "avg": 2.2045,
+          "p25": 2.2,
+          "p50": 2.2,
+          "p75": 2.2
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.04,
+          "max": 0.1,
+          "avg": 0.0693,
+          "p25": 0.05,
+          "p50": 0.06,
+          "p75": 0.09
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.14,
+          "max": -0.08,
+          "avg": -0.0995,
+          "p25": -0.11,
+          "p50": -0.1,
+          "p75": -0.09
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.46,
+          "max": 0.55,
+          "avg": 0.5035,
+          "p25": 0.5,
+          "p50": 0.5,
+          "p75": 0.52
+        },
+        "fAntiRollBarForce": {
+          "min": 0.65,
+          "max": 1.1,
+          "avg": 0.883,
+          "p25": 0.9,
+          "p50": 0.9,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.53,
+          "max": 0.65,
+          "avg": 0.5959,
+          "p25": 0.6,
+          "p50": 0.6,
+          "p75": 0.6
+        },
+        "fCollisionDamageMult": {
+          "min": 0.7,
+          "max": 0.7,
+          "avg": 0.7,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.7,
+          "max": 0.7,
+          "avg": 0.7,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 1.5,
+          "max": 1.5,
+          "avg": 1.5,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.5,
+          "avg": 0.3207,
+          "p25": 0.2,
+          "p50": 0.3,
+          "p75": 0.48
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.8,
+          "max": 1.3,
+          "avg": 0.8614,
+          "p25": 0.8,
+          "p50": 0.8,
+          "p75": 0.9
+        },
+        "fTractionLossMult": {
+          "min": 0.4,
+          "max": 1.0,
+          "avg": 0.7875,
+          "p25": 0.55,
+          "p50": 1.0,
+          "p75": 1.0
+        }
+      }
+    },
+    "Muscle": {
+      "count": 27,
+      "fields": {
+        "fMass": {
+          "min": 1800.0,
+          "max": 2200.0,
+          "avg": 1864.0,
+          "p25": 1800.0,
+          "p50": 1800.0,
+          "p75": 1800.0
+        },
+        "fInitialDragCoeff": {
+          "min": 8.0,
+          "max": 8.0,
+          "avg": 8.0,
+          "p25": 8.0,
+          "p50": 8.0,
+          "p75": 8.0
+        },
+        "fBrakeForce": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fBrakeBiasFront": {
+          "min": 0.43,
+          "max": 0.8,
+          "avg": 0.5396,
+          "p25": 0.5,
+          "p50": 0.525,
+          "p75": 0.585
+        },
+        "fHandBrakeForce": {
+          "min": 0.49,
+          "max": 2.5,
+          "avg": 1.266,
+          "p25": 0.8,
+          "p50": 1.3,
+          "p75": 1.6
+        },
+        "fSteeringLock": {
+          "min": 40.0,
+          "max": 40.0,
+          "avg": 40.0,
+          "p25": 40.0,
+          "p50": 40.0,
+          "p75": 40.0
+        },
+        "fTractionCurveMax": {
+          "min": 2.6,
+          "max": 2.9,
+          "avg": 2.732,
+          "p25": 2.7,
+          "p50": 2.7,
+          "p75": 2.7
+        },
+        "fTractionCurveMin": {
+          "min": 2.0,
+          "max": 2.4,
+          "avg": 2.216,
+          "p25": 2.2,
+          "p50": 2.2,
+          "p75": 2.2
+        },
+        "fTractionBiasFront": {
+          "min": 0.475,
+          "max": 0.5,
+          "avg": 0.4873,
+          "p25": 0.485,
+          "p50": 0.485,
+          "p75": 0.488
+        },
+        "fDriveInertia": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "nInitialDriveGears": {
+          "min": 6,
+          "max": 7,
+          "avg": 6.16,
+          "p25": 6,
+          "p50": 6,
+          "p75": 6
+        },
+        "fInitialDriveForce": {
+          "min": 0.3,
+          "max": 0.45,
+          "avg": 0.338,
+          "p25": 0.3,
+          "p50": 0.35,
+          "p75": 0.35
+        },
+        "fInitialDriveMaxFlatVel": {
+          "min": 190.0,
+          "max": 250.0,
+          "avg": 212.4,
+          "p25": 200.0,
+          "p50": 220.0,
+          "p75": 220.0
+        },
+        "fSuspensionForce": {
+          "min": 2.0,
+          "max": 4.0,
+          "avg": 2.528,
+          "p25": 2.1,
+          "p50": 2.5,
+          "p75": 2.65
+        },
+        "fSuspensionCompDamp": {
+          "min": 0.9,
+          "max": 2.3,
+          "avg": 1.438,
+          "p25": 1.4,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fSuspensionReboundDamp": {
+          "min": 0.4,
+          "max": 2.2,
+          "avg": 1.854,
+          "p25": 1.6,
+          "p50": 2.025,
+          "p75": 2.2
+        },
+        "fSuspensionUpperLimit": {
+          "min": 0.05,
+          "max": 0.15,
+          "avg": 0.0944,
+          "p25": 0.08,
+          "p50": 0.095,
+          "p75": 0.11
+        },
+        "fSuspensionLowerLimit": {
+          "min": -0.15,
+          "max": -0.08,
+          "avg": -0.1096,
+          "p25": -0.11,
+          "p50": -0.11,
+          "p75": -0.1
+        },
+        "fSuspensionBiasFront": {
+          "min": 0.47,
+          "max": 0.52,
+          "avg": 0.4948,
+          "p25": 0.49,
+          "p50": 0.5,
+          "p75": 0.5
+        },
+        "fAntiRollBarForce": {
+          "min": 0.6,
+          "max": 1.4,
+          "avg": 0.872,
+          "p25": 0.8,
+          "p50": 0.9,
+          "p75": 0.9
+        },
+        "fAntiRollBarBiasFront": {
+          "min": 0.25,
+          "max": 0.65,
+          "avg": 0.5328,
+          "p25": 0.45,
+          "p50": 0.6,
+          "p75": 0.6
+        },
+        "fCollisionDamageMult": {
+          "min": 0.7,
+          "max": 0.7,
+          "avg": 0.7,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fWeaponDamageMult": {
+          "min": 1.0,
+          "max": 1.0,
+          "avg": 1.0,
+          "p25": 1.0,
+          "p50": 1.0,
+          "p75": 1.0
+        },
+        "fDeformationDamageMult": {
+          "min": 0.7,
+          "max": 0.7,
+          "avg": 0.7,
+          "p25": 0.7,
+          "p50": 0.7,
+          "p75": 0.7
+        },
+        "fEngineDamageMult": {
+          "min": 1.5,
+          "max": 1.5,
+          "avg": 1.5,
+          "p25": 1.5,
+          "p50": 1.5,
+          "p75": 1.5
+        },
+        "fDriveBiasFront": {
+          "min": 0.0,
+          "max": 0.5,
+          "avg": 0.268,
+          "p25": 0.2,
+          "p50": 0.3,
+          "p75": 0.4
+        },
+        "fLowSpeedTractionLossMult": {
+          "min": 0.8,
+          "max": 1.1,
+          "avg": 0.964,
+          "p25": 0.9,
+          "p50": 0.9,
+          "p75": 1.1
+        },
+        "fTractionLossMult": {
+          "min": 0.1,
+          "max": 1.4,
+          "avg": 0.86,
+          "p25": 0.6,
+          "p50": 1.0,
+          "p75": 1.0
+        }
+      }
+    }
+  },
+  "global": {
+    "count": 1253,
+    "fields": {
+      "fMass": {
+        "min": 1200.0,
+        "max": 4000.0,
+        "avg": 1903.1706,
+        "p25": 1800.0,
+        "p50": 1800.0,
+        "p75": 2000.0
+      },
+      "fInitialDragCoeff": {
+        "min": 5.0,
+        "max": 10.0,
+        "avg": 7.9292,
+        "p25": 8.0,
+        "p50": 8.0,
+        "p75": 8.0
+      },
+      "fBrakeForce": {
+        "min": 0.4,
+        "max": 2.0,
+        "avg": 0.9654,
+        "p25": 1.0,
+        "p50": 1.0,
+        "p75": 1.0
+      },
+      "fBrakeBiasFront": {
+        "min": 0.425,
+        "max": 0.6514,
+        "avg": 0.538,
+        "p25": 0.46,
+        "p50": 0.525,
+        "p75": 0.6
+      },
+      "fHandBrakeForce": {
+        "min": 0.32,
+        "max": 3.6,
+        "avg": 0.9653,
+        "p25": 0.6,
+        "p50": 0.8,
+        "p75": 1.2
+      },
+      "fSteeringLock": {
+        "min": 35.0,
+        "max": 42.0,
+        "avg": 39.4516,
+        "p25": 40.0,
+        "p50": 40.0,
+        "p75": 40.0
+      },
+      "fTractionCurveMax": {
+        "min": 1.5,
+        "max": 2.95,
+        "avg": 2.6421,
+        "p25": 2.6,
+        "p50": 2.7,
+        "p75": 2.9
+      },
+      "fTractionCurveMin": {
+        "min": 1.4,
+        "max": 2.6,
+        "avg": 2.1656,
+        "p25": 2.0,
+        "p50": 2.2,
+        "p75": 2.3
+      },
+      "fTractionBiasFront": {
+        "min": 0.45,
+        "max": 0.5,
+        "avg": 0.4837,
+        "p25": 0.48,
+        "p50": 0.485,
+        "p75": 0.49
+      },
+      "fDriveInertia": {
+        "min": 0.87,
+        "max": 1.0,
+        "avg": 0.9998,
+        "p25": 1.0,
+        "p50": 1.0,
+        "p75": 1.0
+      },
+      "nInitialDriveGears": {
+        "min": 2,
+        "max": 7,
+        "avg": 5.6953,
+        "p25": 5,
+        "p50": 6,
+        "p75": 6
+      },
+      "fInitialDriveForce": {
+        "min": 0.16,
+        "max": 0.55,
+        "avg": 0.3382,
+        "p25": 0.3,
+        "p50": 0.35,
+        "p75": 0.37
+      },
+      "fInitialDriveMaxFlatVel": {
+        "min": 130.0,
+        "max": 240.0,
+        "avg": 203.097,
+        "p25": 190.0,
+        "p50": 210.0,
+        "p75": 220.0
+      },
+      "fSuspensionForce": {
+        "min": 1.4,
+        "max": 4.0,
+        "avg": 2.4907,
+        "p25": 2.1,
+        "p50": 2.6,
+        "p75": 2.8
+      },
+      "fSuspensionCompDamp": {
+        "min": 0.8,
+        "max": 2.5,
+        "avg": 1.4395,
+        "p25": 1.2,
+        "p50": 1.4,
+        "p75": 1.5
+      },
+      "fSuspensionReboundDamp": {
+        "min": 1.0,
+        "max": 3.3,
+        "avg": 2.0662,
+        "p25": 1.65,
+        "p50": 2.2,
+        "p75": 2.2
+      },
+      "fSuspensionUpperLimit": {
+        "min": 0.0405,
+        "max": 0.2,
+        "avg": 0.0944,
+        "p25": 0.0772,
+        "p50": 0.095,
+        "p75": 0.1
+      },
+      "fSuspensionLowerLimit": {
+        "min": -0.2,
+        "max": -0.05,
+        "avg": -0.1245,
+        "p25": -0.15,
+        "p50": -0.12,
+        "p75": -0.1
+      },
+      "fSuspensionBiasFront": {
+        "min": 0.4,
+        "max": 0.55,
+        "avg": 0.4969,
+        "p25": 0.48,
+        "p50": 0.5,
+        "p75": 0.52
+      },
+      "fAntiRollBarForce": {
+        "min": 0.0,
+        "max": 1.2,
+        "avg": 0.7303,
+        "p25": 0.6,
+        "p50": 0.85,
+        "p75": 0.9
+      },
+      "fAntiRollBarBiasFront": {
+        "min": 0.0,
+        "max": 0.68,
+        "avg": 0.5235,
+        "p25": 0.5,
+        "p50": 0.55,
+        "p75": 0.6
+      },
+      "fCollisionDamageMult": {
+        "min": 0.7,
+        "max": 1.0,
+        "avg": 0.7385,
+        "p25": 0.7,
+        "p50": 0.7,
+        "p75": 0.7
+      },
+      "fWeaponDamageMult": {
+        "min": 1.0,
+        "max": 1.0,
+        "avg": 1.0,
+        "p25": 1.0,
+        "p50": 1.0,
+        "p75": 1.0
+      },
+      "fDeformationDamageMult": {
+        "min": 0.5,
+        "max": 0.8,
+        "avg": 0.7061,
+        "p25": 0.7,
+        "p50": 0.7,
+        "p75": 0.7
+      },
+      "fEngineDamageMult": {
+        "min": 1.5,
+        "max": 1.5,
+        "avg": 1.5,
+        "p25": 1.5,
+        "p50": 1.5,
+        "p75": 1.5
+      },
+      "fDriveBiasFront": {
+        "min": 0.0,
+        "max": 0.6,
+        "avg": 0.2761,
+        "p25": 0.0,
+        "p50": 0.3,
+        "p75": 0.5
+      },
+      "fLowSpeedTractionLossMult": {
+        "min": 0.0,
+        "max": 1.1,
+        "avg": 0.8607,
+        "p25": 0.8,
+        "p50": 0.9,
+        "p75": 1.0
+      },
+      "fTractionLossMult": {
+        "min": 0.0,
+        "max": 1.0,
+        "avg": 0.7844,
+        "p25": 0.6,
+        "p50": 1.0,
+        "p75": 1.0
+      }
+    }
+  }
+}
