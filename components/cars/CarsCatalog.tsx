@@ -643,7 +643,7 @@ export function CarsCatalog({ cars }: { cars: Car[] }) {
         ) : (
           <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map((car, i) => (
-              <div key={car.id} style={{ opacity: 0 }}>
+              <div key={car.id}>
                 <CarCard car={car} index={i} onSelect={() => setSelectedCar(car)} />
               </div>
             ))}
@@ -674,6 +674,7 @@ export function CarsCatalog({ cars }: { cars: Car[] }) {
       </div>
 
       <style jsx global>{`
+        .car-card-enter { opacity: 0; }
         @keyframes photo-fade { from { opacity:0; transform:scale(1.03); } to { opacity:1; transform:scale(1); } }
         .photo-fade { animation: photo-fade 0.35s ease-out; }
         @keyframes pulse-anim {
