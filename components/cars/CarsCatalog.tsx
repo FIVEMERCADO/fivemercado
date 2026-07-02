@@ -30,6 +30,7 @@ interface Car {
   photos?: string[] | null;
   is_animated?: boolean;
   description?: string | null;
+  handling_name?: string | null;
 }
 
 // ── Stat bar (IntersectionObserver para cards) ────────────────────────────────
@@ -245,6 +246,18 @@ function CarModal({ car, onClose }: { car: Car; onClose: () => void }) {
             <div>
               <p className="font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: `${cfg.color}70` }}>{car.brand}</p>
               <h2 className="font-orbitron font-black text-2xl sm:text-3xl uppercase text-white leading-tight">{car.name}</h2>
+              {car.handling_name && (
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Spawn name</span>
+                  <code
+                    className="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold border cursor-pointer select-all transition-all hover:border-opacity-60"
+                    style={{ borderColor: `${cfg.color}35`, color: cfg.color, backgroundColor: `${cfg.color}10` }}
+                    title="Click para seleccionar"
+                  >
+                    {car.handling_name.toLowerCase()}
+                  </code>
+                </div>
+              )}
             </div>
 
             {/* Descripción */}
@@ -462,6 +475,11 @@ function CarCard({ car, index, onSelect }: { car: Car; index: number; onSelect: 
           <div>
             <p className="font-mono text-[9px] uppercase tracking-widest mb-0.5" style={{ color: `${cfg.color}70` }}>{car.brand}</p>
             <h3 className="font-orbitron font-black text-sm uppercase text-white leading-tight">{car.name}</h3>
+            {car.handling_name && (
+              <span className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 rounded text-[9px] font-mono border border-white/10 bg-white/[0.03] text-white/35 select-all">
+                spawn: {car.handling_name.toLowerCase()}
+              </span>
+            )}
           </div>
 
           {s && (s.engine || s.drive || s.gears) && (
