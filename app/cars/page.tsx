@@ -9,7 +9,7 @@ async function getCars() {
   const supabase = supabaseClient();
   const { data } = await supabase
     .from("cars")
-    .select("id, name, brand, category, price, is_free, image_url, stats, photos")
+    .select("id, name, brand, category, price, is_free, image_url, stats, photos, is_animated, description")
     .eq("is_published", true)
     .order("created_at", { ascending: false });
   return data ?? [];
