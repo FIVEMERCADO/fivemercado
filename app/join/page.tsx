@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 const INVITE = process.env.NEXT_PUBLIC_DISCORD_INVITE ?? "https://discord.gg/rS5akJYFaa";
 
 export default function JoinPage() {
-  const router  = useRouter();
   const [checking, setChecking] = useState(false);
   const [error, setError]       = useState("");
 

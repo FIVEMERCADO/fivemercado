@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { supabaseClient } from "@/lib/supabase";
 
 // POST /api/heartbeat — llamado periódicamente desde el cliente (cada 30s)
 // Actualiza last_seen del usuario autenticado y devuelve conteo online
-export async function POST(_req: NextRequest) {
+export async function POST() {
   const session = await auth();
   const supabase = supabaseClient();
   const now = new Date().toISOString();
