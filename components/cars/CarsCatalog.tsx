@@ -5,15 +5,16 @@ import { Zap, Car, Search, Gauge, Wind, Disc, ChevronLeft, ChevronRight, X } fro
 
 // ── Colores por categoría ─────────────────────────────────────────────────────
 const CAT_CONFIG: Record<string, { color: string; glow: string; bg: string; label: string; emoji: string }> = {
-  Sport:    { color: "#ff6600", glow: "rgba(255,102,0,0.5)",   bg: "rgba(255,102,0,0.06)",   label: "Sport",    emoji: "🏎" },
-  Supercar: { color: "#a855f7", glow: "rgba(168,85,247,0.5)",  bg: "rgba(168,85,247,0.06)",  label: "Supercar", emoji: "⚡" },
-  Muscle:   { color: "#ef4444", glow: "rgba(239,68,68,0.5)",   bg: "rgba(239,68,68,0.06)",   label: "Muscle",   emoji: "💪" },
-  SUV:      { color: "#3b82f6", glow: "rgba(59,130,246,0.5)",  bg: "rgba(59,130,246,0.06)",  label: "SUV",      emoji: "🚙" },
-  Offroad:  { color: "#eab308", glow: "rgba(234,179,8,0.5)",   bg: "rgba(234,179,8,0.06)",   label: "Offroad",  emoji: "🏔" },
-  Moto:     { color: "#ec4899", glow: "rgba(236,72,153,0.5)",  bg: "rgba(236,72,153,0.06)",  label: "Moto",     emoji: "🏍" },
-  Van:      { color: "#6b7280", glow: "rgba(107,114,128,0.5)", bg: "rgba(107,114,128,0.06)", label: "Van",      emoji: "🚐" },
-  Truck:    { color: "#10b981", glow: "rgba(16,185,129,0.5)",  bg: "rgba(16,185,129,0.06)",  label: "Truck",    emoji: "🚛" },
-  Sedan:    { color: "#00e5ff", glow: "rgba(0,229,255,0.5)",   bg: "rgba(0,229,255,0.06)",   label: "Sedan",    emoji: "🚗" },
+  Sport:     { color: "#ff6600", glow: "rgba(255,102,0,0.5)",   bg: "rgba(255,102,0,0.06)",   label: "Sport",     emoji: "🏎" },
+  Supercar:  { color: "#a855f7", glow: "rgba(168,85,247,0.5)",  bg: "rgba(168,85,247,0.06)",  label: "Supercar",  emoji: "⚡" },
+  Muscle:    { color: "#ef4444", glow: "rgba(239,68,68,0.5)",   bg: "rgba(239,68,68,0.06)",   label: "Muscle",    emoji: "💪" },
+  SUV:       { color: "#3b82f6", glow: "rgba(59,130,246,0.5)",  bg: "rgba(59,130,246,0.06)",  label: "SUV",       emoji: "🚙" },
+  Drift:     { color: "#f59e0b", glow: "rgba(245,158,11,0.5)",  bg: "rgba(245,158,11,0.06)",  label: "Drift",     emoji: "🌀" },
+  Limousine: { color: "#8b5cf6", glow: "rgba(139,92,246,0.5)",  bg: "rgba(139,92,246,0.06)",  label: "Limousine", emoji: "🎩" },
+  Sedan:     { color: "#00e5ff", glow: "rgba(0,229,255,0.5)",   bg: "rgba(0,229,255,0.06)",   label: "Sedan",     emoji: "🚗" },
+  Offroad:   { color: "#eab308", glow: "rgba(234,179,8,0.5)",   bg: "rgba(234,179,8,0.06)",   label: "Offroad",   emoji: "🏔" },
+  Moto:      { color: "#ec4899", glow: "rgba(236,72,153,0.5)",  bg: "rgba(236,72,153,0.06)",  label: "Moto",      emoji: "🏍" },
+  Truck:     { color: "#10b981", glow: "rgba(16,185,129,0.5)",  bg: "rgba(16,185,129,0.06)",  label: "Truck",     emoji: "🚛" },
 };
 function getCat(cat: string) { return CAT_CONFIG[cat] ?? CAT_CONFIG.Sport; }
 
