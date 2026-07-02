@@ -25,11 +25,6 @@ const PARAMS: Param[] = [
     game_tip: "Determina qué tan fuerte empuja el motor. Muy alto hace las ruedas patinar al salir.",
   },
   {
-    key: "nInitialDriveGears",      label: "Número de Marchas",  unit: "vel",  step: 1,    decimals: 0,
-    emoji: "⚙️", tip: "Velocidades del gearbox",
-    game_tip: "Más marchas = aceleración más suave y progresiva. Sport: 6-7, Supercar: 7-8.",
-  },
-  {
     key: "fBrakeForce",             label: "Potencia de Frenos", unit: "",     step: 0.05, decimals: 2,
     emoji: "🛑", tip: "Qué tan corto frena",
     game_tip: "Más alto frena más corto. Muy alto puede bloquear ruedas en curvas. Sport: 0.6–0.9.",
@@ -40,9 +35,19 @@ const PARAMS: Param[] = [
     game_tip: "Alto para hacer drifts y derrapes controlados. Bajo para grip en pista.",
   },
   {
-    key: "fTractionCurveMax",       label: "Grip de Tracción",   unit: "",     step: 0.05, decimals: 2,
-    emoji: "🛞", tip: "Agarre al acelerar",
+    key: "fTractionCurveMax",       label: "Grip / Agarre",      unit: "",     step: 0.05, decimals: 2,
+    emoji: "🛞", tip: "Cuánto agarra al acelerar",
     game_tip: "Más alto = más grip, menos derrape. Bajo = derrapa fácil (drift). Sport: 2.0–2.8.",
+  },
+  {
+    key: "fTractionCurveMin",       label: "Grip al Derrapar",   unit: "",     step: 0.05, decimals: 2,
+    emoji: "💫", tip: "Agarre mientras derrapa",
+    game_tip: "Bajo = derrapes largos y sueltos. Alto = el carro recupera grip rápido. Para drift: 1.4–1.8.",
+  },
+  {
+    key: "fAntiRollBarForce",       label: "Pegado al Piso",     unit: "",     step: 0.05, decimals: 2,
+    emoji: "🧲", tip: "Anti-roll — estabilidad en curvas",
+    game_tip: "Más alto = menos ladeo en curvas, carro más plantado. 0.6–0.9 para sport. Bajo = se inclina al curvar.",
   },
   {
     key: "fSuspensionForce",        label: "Dureza Suspensión",  unit: "",     step: 0.1,  decimals: 1,
@@ -54,17 +59,22 @@ const PARAMS: Param[] = [
     emoji: "🚗", tip: "0=Trasera · 0.5=AWD · 1=Delantera",
     game_tip: "0 = tracción solo trasera (RWD, sport). 0.5 = 4x4 total. 1 = tracción delantera (FWD).",
   },
+  {
+    key: "fMass",                   label: "Peso del Carro",     unit: "kg",   step: 50,   decimals: 0,
+    emoji: "⚖️", tip: "Masa total en kilogramos",
+    game_tip: "Sport: 1200–1800 kg. SUV: 2000–2500 kg. Más peso = mejor tracción en llano, pero frena más lento.",
+  },
 ];
 
 // ── Presets ───────────────────────────────────────────────────────────────────
 interface Preset { label: string; color: string; glowClass: string; desc: string; values: Partial<Record<string, number>> }
 const PRESETS: Record<string, Preset> = {
   stock:   { label: "Original",  color: "#ffffff60",  glowClass: "",                     desc: "Configuración original del fabricante",          values: {} },
-  race:    { label: "Carrera",   color: "#ff6600",    glowClass: "shadow-primary/30",     desc: "Máxima velocidad y frenado agresivo",            values: { fInitialDriveForce: 0.48, fBrakeForce: 1.1, fTractionCurveMax: 2.8, fSuspensionForce: 3.5, fInitialDriveMaxFlatVel: 300, nInitialDriveGears: 7 } },
-  drift:   { label: "Drift",     color: "#ec4899",    glowClass: "shadow-pink/30",        desc: "Trasera suelta para derrapes controlados",       values: { fInitialDriveForce: 0.4,  fTractionCurveMax: 1.3, fHandBrakeForce: 1.8, fBrakeForce: 0.6, fDriveBiasFront: 0, nInitialDriveGears: 6 } },
-  grip:    { label: "Grip",      color: "#00ff9f",    glowClass: "shadow-neon/30",        desc: "Máximo agarre para circuitos técnicos",          values: { fTractionCurveMax: 3.2, fSuspensionForce: 3.8, fHandBrakeForce: 0.3, fBrakeForce: 0.9, fDriveBiasFront: 0 } },
-  offroad: { label: "Offroad",   color: "#facc15",    glowClass: "shadow-yellow-400/30",  desc: "Suspensión alta y tracción total para campo",    values: { fSuspensionForce: 1.2, fDriveBiasFront: 0.5, fTractionCurveMax: 2.0, fInitialDriveMaxFlatVel: 180, nInitialDriveGears: 5 } },
-  street:  { label: "Calle",     color: "#7c3aed",    glowClass: "shadow-secondary/30",   desc: "Balance diario — rápido y cómodo para tráfico", values: { fInitialDriveForce: 0.32, fBrakeForce: 0.7, fSuspensionForce: 2.0, fTractionCurveMax: 2.3, fInitialDriveMaxFlatVel: 220 } },
+  race:    { label: "Carrera",   color: "#ff6600",    glowClass: "shadow-primary/30",     desc: "Máxima velocidad y frenado agresivo",            values: { fInitialDriveForce: 0.48, fBrakeForce: 1.1, fTractionCurveMax: 2.8, fTractionCurveMin: 2.3, fAntiRollBarForce: 0.9, fSuspensionForce: 3.5, fInitialDriveMaxFlatVel: 300 } },
+  drift:   { label: "Drift",     color: "#ec4899",    glowClass: "shadow-pink/30",        desc: "Trasera suelta para derrapes controlados",       values: { fInitialDriveForce: 0.4,  fTractionCurveMax: 1.5, fTractionCurveMin: 1.2, fHandBrakeForce: 1.8, fBrakeForce: 0.6, fDriveBiasFront: 0, fAntiRollBarForce: 0.4 } },
+  grip:    { label: "Grip",      color: "#00ff9f",    glowClass: "shadow-neon/30",        desc: "Máximo agarre para circuitos técnicos",          values: { fTractionCurveMax: 2.9, fTractionCurveMin: 2.5, fAntiRollBarForce: 1.0, fSuspensionForce: 3.8, fHandBrakeForce: 0.3, fBrakeForce: 0.9, fDriveBiasFront: 0 } },
+  offroad: { label: "Offroad",   color: "#facc15",    glowClass: "shadow-yellow-400/30",  desc: "Suspensión alta y tracción total para campo",    values: { fSuspensionForce: 1.2, fDriveBiasFront: 0.5, fTractionCurveMax: 2.0, fAntiRollBarForce: 0.5, fInitialDriveMaxFlatVel: 180 } },
+  street:  { label: "Calle",     color: "#7c3aed",    glowClass: "shadow-secondary/30",   desc: "Balance diario — rápido y cómodo para tráfico", values: { fInitialDriveForce: 0.32, fBrakeForce: 0.7, fSuspensionForce: 2.0, fTractionCurveMax: 2.3, fAntiRollBarForce: 0.7, fInitialDriveMaxFlatVel: 220 } },
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
