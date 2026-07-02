@@ -1,41 +1,41 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const BASE = "https://img.fivemercado.com";
 
 const SLIDES = [
   {
-    src: `${BASE}/hero-marketplace.webm`,
+    src: `${BASE}/hero-marketplace.webp`,
     label: "MARKETPLACE",
     title: "Scripts Premium",
     sub: "Los mejores recursos FiveM en español",
     color: "from-primary/60",
   },
   {
-    src: `${BASE}/car-customization.webm`,
+    src: `${BASE}/car-customization.webp`,
     label: "EXCLUSIVO",
     title: "Edita el Handling",
     sub: "Personaliza cada carro desde la web",
     color: "from-secondary/50",
   },
   {
-    src: `${BASE}/scripts-codigo.webm`,
+    src: `${BASE}/scripts-codigo.webp`,
     label: "SCRIPTS",
     title: "Código Verificado",
     sub: "Recursos revisados por nuestra comunidad",
     color: "from-pink/50",
   },
   {
-    src: `${BASE}/ciudad-gta-noche.webm`,
+    src: `${BASE}/ciudad-gta-noche.webp`,
     label: "FIVEM",
     title: "Lleva tu servidor",
     sub: "Al siguiente nivel",
     color: "from-primary/60",
   },
   {
-    src: `${BASE}/carros-racing.webm`,
+    src: `${BASE}/carros-racing.webp`,
     label: "CARROS",
     title: "Catálogo de Vehículos",
     sub: "Con handling personalizado incluido",
@@ -46,7 +46,6 @@ const SLIDES = [
 export function HeroCarousel() {
   const [current, setCurrent]     = useState(0);
   const [animating, setAnimating] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   const go = useCallback((idx: number) => {
     if (animating) return;
@@ -60,14 +59,8 @@ export function HeroCarousel() {
   const prev = () => go(current - 1);
   const next = useCallback(() => go(current + 1), [current, go]);
 
-  // Reiniciar video al cambiar slide
   useEffect(() => {
-    videoRef.current?.load();
-  }, [current]);
-
-  // Auto-advance cada 8s
-  useEffect(() => {
-    const t = setInterval(next, 8000);
+    const t = setInterval(next, 6000);
     return () => clearInterval(t);
   }, [next]);
 
@@ -78,19 +71,15 @@ export function HeroCarousel() {
       className="relative w-full overflow-hidden rounded-2xl border border-primary/20 shadow-neon-orange group"
       style={{ aspectRatio: "16/7" }}
     >
-      {/* Video de fondo */}
+      {/* Imagen de fondo */}
       <div className={`absolute inset-0 transition-opacity duration-300 ${animating ? "opacity-0" : "opacity-100"}`}>
-        <video
-          ref={videoRef}
-          key={slide.src}
-          autoPlay
-          muted
-          loop
-          playsInline
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={slide.src}
+          alt={slide.title}
           className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={slide.src} type="video/webm" />
-        </video>
+          loading="eager"
+        />
       </div>
 
       {/* Overlay gradiente */}
